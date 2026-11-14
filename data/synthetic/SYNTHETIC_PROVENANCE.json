@@ -1,0 +1,17 @@
+{
+  "dataset": "ASTRA synthetic crew telemetry",
+  "file": "crew_telemetry.csv",
+  "mode": "synthetic",
+  "subjects": "four fictional crew members",
+  "record_count": 120,
+  "mission_days": [
+    120,
+    149
+  ],
+  "generation_method": "deterministic seeded Python generator authored with AI assistance as part of planning handoff",
+  "seed": 20261114,
+  "real_astronaut_data": false,
+  "nasa_data": false,
+  "clinical_validation": false,
+  "use_limitation": "demo interaction testing, not for medical recommendations or model calibration"
+}

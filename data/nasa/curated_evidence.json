@@ -1,0 +1,32 @@
+[
+  {
+    "source_id": "nasa-sleep",
+    "title": "Risk of Performance Decrements and Adverse Health Outcomes Resulting from Sleep Loss, Circadian Desynchronization, and Work Overload",
+    "provider": "NASA Human Health and Performance",
+    "url": "https://www.nasa.gov/directorates/esdmd/hhp/risk-of-performance-decrements-and-adverse-health-outcomes-resulting-from-sleep-loss-circadian-desynchronization-and-work-overload/",
+    "used_for": "Sleep and circadian context for evidence cards and explanations. Does not establish ASTRA's deviation thresholds, explain an individual's HRV, or validate scenario benefits.",
+    "summary": "NASA describes sleep loss, disrupted circadian timing, and environmental interference with sleep as concerns for crew performance. ASTRA uses this research context to explain why a sleep trend may merit review.",
+    "retrieved_utc": "2026-11-14T01:22:21Z",
+    "is_challenge_listed": null
+  },
+  {
+    "source_id": "nasa-human-risks",
+    "title": "Human System Risks",
+    "provider": "NASA Human Health and Performance",
+    "url": "https://www.nasa.gov/hhp/human-system-risks/",
+    "used_for": "Research risk taxonomy and contextual links for the science page and review findings. The catalog does not supply ASTRA telemetry or validate its unitless prototype signal categories.",
+    "summary": "NASA's catalog includes sleep, cardiovascular, muscle, bone, radiation, and cabin carbon dioxide risks. These categories frame ASTRA's research references; fictional daily readings and fixture-specific rules remain separate.",
+    "retrieved_utc": "2026-11-14T01:22:21Z",
+    "is_challenge_listed": null
+  },
+  {
+    "source_id": "nasa-spaceflight",
+    "title": "Risks of Human Spaceflight",
+    "provider": "NASA Human Research Program",
+    "url": "https://www.nasa.gov/hrp/risks/",
+    "used_for": "Mission context and limitations for the science page and illustrative sleep/exercise planning comparisons. No NASA effect size or clinical prediction is implemented from this page.",
+    "summary": "NASA organizes human-spaceflight risks around radiation, isolation and confinement, distance from Earth, gravity changes, and hostile or closed environments. Its overview includes sleep and fitness research, providing context rather than a personalized prediction model.",
+    "retrieved_utc": "2026-11-14T01:22:21Z",
+    "is_challenge_listed": null
+  }
+]

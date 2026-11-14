@@ -1,0 +1,13 @@
+# Paste this into Codex (after official hackathon build starts)
+
+Implement the entire ASTRA application in THIS repository, using the docs and included fixture dataset as your authoritative specification. Begin by reading `AGENTS.md`, `START_HERE_CODEX.md`, `docs/06_IMPLEMENTATION_ROADMAP.md`, `docs/04_DATA_SCIENCE_AND_SAFETY.md`, and `docs/05_API_AND_SCHEMAS.md`.
+
+You are the lead builder/orchestrator. Follow the role playbooks under `agents/` sequentially or delegate them to subagents if your environment supports that. You own final integration. Do not ask me about routine choices; implement sensible defaults and log decisions. Create a polished **landing page at /** and the functional **ASTRA astronaut health monitoring product at /mission**. Ensure the four functional runtime agents (Monitoring, Risk Assessment, Simulation, Explanation) are actually wired into the UI with auditable, deterministic behavior and test coverage. Implement all P0 and P1 acceptance criteria and tests before optional enhancements.
+
+The fixture telemetry is SYNTHETIC. Use it for demos; never call it actual NASA astronaut telemetry. Integrate a real, cited NASA resource using a reproducible source manifest, and confirm it is on the specific 2026 challenge Resources tab if accessible. If that check is blocked, record it as an explicit human verification task, do not claim confirmed eligibility, and still finish the app.
+
+Create a clean, responsive, keyboard-accessible sci-fi medical UI in English, fast enough to demo in 30 seconds. Add the landing-to-product navigation, synthetic mission timeline, four crew profiles, anomaly detection, reasoned risk cards, a simple 30-day outlook with transparent illustrative assumptions, what-if controls, and a science/provenance page. Use no fake medical statistics, no unsupported risk calibration, no patient-identifying data and no unbounded medical advice. LLM integration must be optional and not required.
+
+Then run relevant tests, lint, typecheck and production build; fix issues. Prepare the public deployment recipe, seven-slide outline, 30-second storyboard, NASA submission field draft, source/AI disclosure, and proof-of-quality checklist. Update build logs with what passed and what remains blocked. Finish with a concise report of paths, URLs (if real), tests, remaining risks, and exact human submission steps.
+
+TIME BOX: prioritize reliable end-to-end execution and presentation over breadth. If necessary, cut optional 3D, actual LLM calls, real streaming and auth first. NEVER cut the core monitoring → alert → scenario → explained action demo or mandatory submission materials.

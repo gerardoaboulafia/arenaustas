@@ -4,3 +4,14 @@ dist/
 
 # Local copy of the NASA submission guide; read it online instead
 NASA Space Apps Challenge.pdf
+
+# ASTRA local build, development and release artifacts
+.next/
+out/
+coverage/
+*.tsbuildinfo
+.env*
+!.env.example
+tmp/
+test-results/
+release/
