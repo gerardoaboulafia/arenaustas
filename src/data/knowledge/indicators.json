@@ -1,101 +1,558 @@
 [
   {
-    "id": "restingHr", "name": "Heart rate", "unit": "bpm", "agent": "biometric",
-    "input": { "min": 30, "max": 200, "step": 1 },
-    "rule": { "direction": "higher", "mode": "ratio", "watch": 1.1, "alert": 1.2 },
-    "basis": "assumption", "needsReview": true, "sourceId": "nasa-risks", "hazardIds": ["gravity"],
+    "id": "restingHr",
+    "name": "Heart rate",
+    "unit": "bpm",
+    "agent": "biometric",
+    "input": {
+      "min": 30,
+      "max": 200,
+      "step": 1
+    },
+    "rule": {
+      "direction": "higher",
+      "mode": "ratio",
+      "watch": 1.1,
+      "alert": 1.2
+    },
+    "basis": "assumption",
+    "needsReview": true,
+    "sourceId": "nasa-risks",
+    "hazardIds": [
+      "gravity"
+    ],
     "whyItMatters": "Your resting heart rate shows how hard your heart works at rest. A lasting rise above your own baseline is worth a closer look.",
     "howToMeasure": "Read it from your wearable after waking, before you get up.",
     "actions": {
-      "watch": [{ "text": "Repeat the reading at rest tomorrow morning and compare it with your baseline.", "basis": "assumption", "needsReview": true }],
-      "alert": [{ "text": "Repeat the reading at rest now. If it stays this high, follow the mission medical protocol.", "basis": "assumption", "needsReview": true }]
+      "watch": [
+        {
+          "text": "Repeat the reading at rest tomorrow morning and compare it with your baseline.",
+          "basis": "assumption",
+          "needsReview": true
+        }
+      ],
+      "alert": [
+        {
+          "text": "Repeat the reading at rest now. If it stays this high, follow the mission medical protocol.",
+          "basis": "assumption",
+          "needsReview": true
+        }
+      ]
     }
   },
   {
-    "id": "sleepHours", "name": "Sleep", "unit": "h", "agent": "biometric",
-    "input": { "min": 0, "max": 14, "step": 0.1 },
-    "rule": { "direction": "lower", "mode": "abs", "watch": 1, "alert": 2 },
-    "basis": "assumption", "needsReview": true, "sourceId": "nasa-sleep-risk", "hazardIds": ["isolation", "hostile-closed"],
+    "id": "sleepHours",
+    "name": "Sleep",
+    "unit": "h",
+    "agent": "biometric",
+    "input": {
+      "min": 0,
+      "max": 14,
+      "step": 0.1
+    },
+    "rule": {
+      "direction": "lower",
+      "mode": "abs",
+      "watch": 1,
+      "alert": 2
+    },
+    "basis": "assumption",
+    "needsReview": true,
+    "sourceId": "nasa-sleep-risk",
+    "hazardIds": [
+      "isolation",
+      "hostile-closed"
+    ],
     "whyItMatters": "NASA lists sleep loss and circadian desynchronization as a risk to crew performance and health.",
     "howToMeasure": "Hours asleep last night, from your wearable's actigraphy.",
     "whatIfInput": "sleepHours",
     "actions": {
-      "watch": [{ "text": "Protect tonight's sleep period and review your light therapy schedule.", "basis": "assumption", "needsReview": true, "whatIf": { "input": "sleepHours", "delta": 1 } }],
-      "alert": [{ "text": "Make sleep the priority for the next days and adjust your light therapy schedule.", "basis": "assumption", "needsReview": true, "whatIf": { "input": "sleepHours", "delta": 2 } }]
+      "watch": [
+        {
+          "text": "Protect tonight's sleep period and review your light therapy schedule.",
+          "basis": "assumption",
+          "needsReview": true,
+          "whatIf": {
+            "input": "sleepHours",
+            "delta": 1
+          }
+        }
+      ],
+      "alert": [
+        {
+          "text": "Make sleep the priority for the next days and adjust your light therapy schedule.",
+          "basis": "assumption",
+          "needsReview": true,
+          "whatIf": {
+            "input": "sleepHours",
+            "delta": 2
+          }
+        }
+      ]
     }
   },
   {
-    "id": "hrvMs", "name": "Heart rate variability", "unit": "ms", "agent": "biometric",
-    "input": { "min": 5, "max": 250, "step": 1 },
-    "rule": { "direction": "lower", "mode": "ratio", "watch": 0.85, "alert": 0.7 },
-    "basis": "assumption", "needsReview": true, "sourceId": "nasa-risks", "hazardIds": ["gravity", "isolation"],
+    "id": "hrvMs",
+    "name": "Heart rate variability",
+    "unit": "ms",
+    "agent": "biometric",
+    "input": {
+      "min": 5,
+      "max": 250,
+      "step": 1
+    },
+    "rule": {
+      "direction": "lower",
+      "mode": "ratio",
+      "watch": 0.85,
+      "alert": 0.7
+    },
+    "basis": "assumption",
+    "needsReview": true,
+    "sourceId": "nasa-risks",
+    "hazardIds": [
+      "gravity",
+      "isolation"
+    ],
     "whyItMatters": "Heart rate variability reflects how well your body is recovering. A lasting drop below your own baseline is worth a closer look.",
     "howToMeasure": "Read the overnight value from your wearable.",
     "actions": {
-      "watch": [{ "text": "Check your sleep and workload for the last days; both can lower this value.", "basis": "assumption", "needsReview": true }],
-      "alert": [{ "text": "Lighten today's workload if the plan allows it and follow the mission medical protocol.", "basis": "assumption", "needsReview": true }]
+      "watch": [
+        {
+          "text": "Check your sleep and workload for the last days; both can lower this value.",
+          "basis": "assumption",
+          "needsReview": true
+        }
+      ],
+      "alert": [
+        {
+          "text": "Lighten today's workload if the plan allows it and follow the mission medical protocol.",
+          "basis": "assumption",
+          "needsReview": true
+        }
+      ]
     }
   },
   {
-    "id": "spo2", "name": "Blood oxygen", "unit": "%", "agent": "biometric",
-    "input": { "min": 70, "max": 100, "step": 1 },
-    "rule": { "direction": "lower", "mode": "abs", "watch": 2, "alert": 4 },
-    "basis": "assumption", "needsReview": true, "sourceId": "nasa-hazards", "hazardIds": ["hostile-closed"],
+    "id": "spo2",
+    "name": "Blood oxygen",
+    "unit": "%",
+    "agent": "biometric",
+    "input": {
+      "min": 70,
+      "max": 100,
+      "step": 1
+    },
+    "rule": {
+      "direction": "lower",
+      "mode": "abs",
+      "watch": 2,
+      "alert": 4
+    },
+    "basis": "assumption",
+    "needsReview": true,
+    "sourceId": "nasa-hazards",
+    "hazardIds": [
+      "hostile-closed"
+    ],
     "whyItMatters": "Blood oxygen depends on your lungs and on the air in the cabin. A lasting drop below your own baseline is worth a closer look.",
     "howToMeasure": "Use the finger sensor while sitting still.",
     "actions": {
-      "watch": [{ "text": "Repeat the reading while sitting still and check the cabin CO2 tile.", "basis": "assumption", "needsReview": true }],
-      "alert": [{ "text": "Repeat the reading now. If it stays this low, follow the mission medical protocol.", "basis": "assumption", "needsReview": true }]
+      "watch": [
+        {
+          "text": "Repeat the reading while sitting still and check the cabin CO2 tile.",
+          "basis": "assumption",
+          "needsReview": true
+        }
+      ],
+      "alert": [
+        {
+          "text": "Repeat the reading now. If it stays this low, follow the mission medical protocol.",
+          "basis": "assumption",
+          "needsReview": true
+        }
+      ]
     }
   },
   {
-    "id": "skinTempC", "name": "Skin temperature", "unit": "°C", "agent": "biometric",
-    "input": { "min": 25, "max": 42, "step": 0.1 },
-    "rule": { "direction": "both", "mode": "abs", "watch": 0.8, "alert": 1.5 },
-    "basis": "assumption", "needsReview": true, "sourceId": "nasa-hazards", "hazardIds": ["hostile-closed"],
+    "id": "skinTempC",
+    "name": "Skin temperature",
+    "unit": "°C",
+    "agent": "biometric",
+    "input": {
+      "min": 25,
+      "max": 42,
+      "step": 0.1
+    },
+    "rule": {
+      "direction": "both",
+      "mode": "abs",
+      "watch": 0.8,
+      "alert": 1.5
+    },
+    "basis": "assumption",
+    "needsReview": true,
+    "sourceId": "nasa-hazards",
+    "hazardIds": [
+      "hostile-closed"
+    ],
     "whyItMatters": "Skin temperature follows your daily rhythm and the cabin climate. A lasting shift from your own baseline is worth a closer look.",
     "howToMeasure": "Read the overnight value from your wearable.",
     "actions": {
-      "watch": [{ "text": "Repeat the reading tonight and check the cabin temperature.", "basis": "assumption", "needsReview": true }],
-      "alert": [{ "text": "Repeat the reading now. If it stays this far from baseline, follow the mission medical protocol.", "basis": "assumption", "needsReview": true }]
+      "watch": [
+        {
+          "text": "Repeat the reading tonight and check the cabin temperature.",
+          "basis": "assumption",
+          "needsReview": true
+        }
+      ],
+      "alert": [
+        {
+          "text": "Repeat the reading now. If it stays this far from baseline, follow the mission medical protocol.",
+          "basis": "assumption",
+          "needsReview": true
+        }
+      ]
     }
   },
   {
-    "id": "exerciseMin", "name": "Resistive exercise", "unit": "min", "agent": "biometric",
-    "input": { "min": 0, "max": 180, "step": 5 },
-    "rule": { "direction": "lower", "mode": "ratio", "watch": 0.75, "alert": 0.5 },
-    "basis": "assumption", "needsReview": true, "sourceId": "nasa-bone-muscle", "hazardIds": ["gravity"],
+    "id": "exerciseMin",
+    "name": "Resistive exercise",
+    "unit": "min",
+    "agent": "biometric",
+    "input": {
+      "min": 0,
+      "max": 180,
+      "step": 5
+    },
+    "rule": {
+      "direction": "lower",
+      "mode": "ratio",
+      "watch": 0.75,
+      "alert": 0.5
+    },
+    "basis": "assumption",
+    "needsReview": true,
+    "sourceId": "nasa-bone-muscle",
+    "hazardIds": [
+      "gravity"
+    ],
     "whyItMatters": "NASA reports that crews exercise about two hours a day to counter bone and muscle loss in microgravity.",
     "howToMeasure": "Minutes of resistive exercise logged today.",
     "whatIfInput": "exerciseMin",
     "actions": {
-      "watch": [{ "text": "Add 15 minutes of resistive exercise to your daily session.", "basis": "assumption", "needsReview": true, "whatIf": { "input": "exerciseMin", "delta": 15 } }],
-      "alert": [{ "text": "Return to your baseline resistive exercise time, adding it in steps.", "basis": "assumption", "needsReview": true, "whatIf": { "input": "exerciseMin", "delta": 30 } }]
+      "watch": [
+        {
+          "text": "Add 15 minutes of resistive exercise to your daily session.",
+          "basis": "assumption",
+          "needsReview": true,
+          "whatIf": {
+            "input": "exerciseMin",
+            "delta": 15
+          }
+        }
+      ],
+      "alert": [
+        {
+          "text": "Return to your baseline resistive exercise time, adding it in steps.",
+          "basis": "assumption",
+          "needsReview": true,
+          "whatIf": {
+            "input": "exerciseMin",
+            "delta": 30
+          }
+        }
+      ]
     }
   },
   {
-    "id": "cabinCo2", "name": "Cabin CO2", "unit": "mmHg", "agent": "environment",
-    "input": { "min": 0, "max": 15, "step": 0.1 },
-    "rule": { "direction": "higher", "mode": "ratio", "watch": 1.25, "alert": 1.5 },
-    "basis": "assumption", "needsReview": true, "sourceId": "nasa-hazards", "hazardIds": ["hostile-closed"],
+    "id": "cabinCo2",
+    "name": "Cabin CO2",
+    "unit": "mmHg",
+    "agent": "environment",
+    "input": {
+      "min": 0,
+      "max": 15,
+      "step": 0.1
+    },
+    "rule": {
+      "direction": "higher",
+      "mode": "ratio",
+      "watch": 1.25,
+      "alert": 1.5
+    },
+    "basis": "assumption",
+    "needsReview": true,
+    "sourceId": "nasa-hazards",
+    "hazardIds": [
+      "hostile-closed"
+    ],
     "whyItMatters": "The spacecraft is a closed environment, so the air you breathe depends on its life-support system.",
     "howToMeasure": "Read by the cabin sensor closest to your sleep station.",
     "actions": {
-      "watch": [{ "text": "Check airflow at your sleep and work stations.", "basis": "assumption", "needsReview": true }],
-      "alert": [{ "text": "Tell the crew and follow the cabin air protocol.", "basis": "assumption", "needsReview": true }]
+      "watch": [
+        {
+          "text": "Check airflow at your sleep and work stations.",
+          "basis": "assumption",
+          "needsReview": true
+        }
+      ],
+      "alert": [
+        {
+          "text": "Tell the crew and follow the cabin air protocol.",
+          "basis": "assumption",
+          "needsReview": true
+        }
+      ]
     }
   },
   {
-    "id": "radiationDose", "name": "Radiation dose", "unit": "mSv/day", "agent": "environment",
-    "input": { "min": 0, "max": 50, "step": 0.05 },
-    "rule": { "direction": "higher", "mode": "ratio", "watch": 1.5, "alert": 3 },
-    "basis": "assumption", "needsReview": true, "sourceId": "nasa-radiation", "hazardIds": ["radiation"],
+    "id": "radiationDose",
+    "name": "Radiation dose",
+    "unit": "mSv/day",
+    "agent": "environment",
+    "input": {
+      "min": 0,
+      "max": 50,
+      "step": 0.05
+    },
+    "rule": {
+      "direction": "higher",
+      "mode": "ratio",
+      "watch": 1.5,
+      "alert": 3
+    },
+    "basis": "assumption",
+    "needsReview": true,
+    "sourceId": "nasa-radiation",
+    "hazardIds": [
+      "radiation"
+    ],
     "whyItMatters": "NASA considers space radiation one of the most hazardous aspects of spaceflight. Dose adds up over the whole mission.",
     "howToMeasure": "Read from your personal dosimeter at the end of the day.",
     "whatIfInput": "radiationDose",
     "actions": {
-      "watch": [{ "text": "Spend more of today in the better-shielded areas of the cabin.", "basis": "assumption", "needsReview": true, "whatIf": { "input": "radiationDose", "delta": -0.2 } }],
-      "alert": [{ "text": "Move to the shielded area and follow the radiation protocol.", "basis": "assumption", "needsReview": true }]
+      "watch": [
+        {
+          "text": "Spend more of today in the better-shielded areas of the cabin.",
+          "basis": "assumption",
+          "needsReview": true,
+          "whatIf": {
+            "input": "radiationDose",
+            "delta": -0.2
+          }
+        }
+      ],
+      "alert": [
+        {
+          "text": "Move to the shielded area and follow the radiation protocol.",
+          "basis": "assumption",
+          "needsReview": true
+        }
+      ]
+    }
+  },
+  {
+    "id": "mood",
+    "name": "Mood",
+    "unit": "/5",
+    "agent": "biometric",
+    "input": {
+      "min": 1,
+      "max": 5,
+      "step": 1
+    },
+    "rule": {
+      "direction": "lower",
+      "mode": "abs",
+      "watch": 1,
+      "alert": 2
+    },
+    "basis": "assumption",
+    "needsReview": true,
+    "sourceId": "nasa-hazards",
+    "hazardIds": [
+      "isolation"
+    ],
+    "whyItMatters": "NASA describes behavioral responses in crews that live isolated and confined for a long time. A lasting drop in how you rate your own mood is worth a closer look.",
+    "howToMeasure": "Rate your mood today from 1 (very low) to 5 (very good).",
+    "actions": {
+      "watch": [
+        {
+          "text": "Take your scheduled personal time today and talk with a crewmate.",
+          "basis": "assumption",
+          "needsReview": true
+        }
+      ],
+      "alert": [
+        {
+          "text": "Tell a crewmate how you have been feeling and follow the behavioral health protocol.",
+          "basis": "assumption",
+          "needsReview": true
+        }
+      ]
+    }
+  },
+  {
+    "id": "systolicBp",
+    "name": "Blood pressure, systolic",
+    "unit": "mmHg",
+    "agent": "biometric",
+    "input": {
+      "min": 60,
+      "max": 220,
+      "step": 1
+    },
+    "rule": {
+      "direction": "both",
+      "mode": "abs",
+      "watch": 12,
+      "alert": 22
+    },
+    "basis": "assumption",
+    "needsReview": true,
+    "sourceId": "nasa-hazards",
+    "hazardIds": [
+      "gravity"
+    ],
+    "whyItMatters": "NASA notes that the body's organs must adjust to each new gravity level. A lasting change from your own baseline is worth a closer look.",
+    "howToMeasure": "Use the cuff after sitting still for five minutes. This is the upper number.",
+    "actions": {
+      "watch": [
+        {
+          "text": "Repeat the blood pressure reading after five minutes at rest.",
+          "basis": "assumption",
+          "needsReview": true
+        }
+      ],
+      "alert": [
+        {
+          "text": "Repeat the blood pressure reading now. If it stays this far from baseline, follow the mission medical protocol.",
+          "basis": "assumption",
+          "needsReview": true
+        }
+      ]
+    }
+  },
+  {
+    "id": "diastolicBp",
+    "name": "Blood pressure, diastolic",
+    "unit": "mmHg",
+    "agent": "biometric",
+    "input": {
+      "min": 30,
+      "max": 140,
+      "step": 1
+    },
+    "rule": {
+      "direction": "both",
+      "mode": "abs",
+      "watch": 9,
+      "alert": 16
+    },
+    "basis": "assumption",
+    "needsReview": true,
+    "sourceId": "nasa-hazards",
+    "hazardIds": [
+      "gravity"
+    ],
+    "whyItMatters": "NASA notes that the body's organs must adjust to each new gravity level. A lasting change from your own baseline is worth a closer look.",
+    "howToMeasure": "Use the cuff after sitting still for five minutes. This is the lower number.",
+    "actions": {
+      "watch": [
+        {
+          "text": "Repeat the blood pressure reading after five minutes at rest.",
+          "basis": "assumption",
+          "needsReview": true
+        }
+      ],
+      "alert": [
+        {
+          "text": "Repeat the blood pressure reading now. If it stays this far from baseline, follow the mission medical protocol.",
+          "basis": "assumption",
+          "needsReview": true
+        }
+      ]
+    }
+  },
+  {
+    "id": "glucose",
+    "name": "Blood sugar",
+    "unit": "mg/dL",
+    "agent": "biometric",
+    "input": {
+      "min": 30,
+      "max": 400,
+      "step": 1
+    },
+    "rule": {
+      "direction": "both",
+      "mode": "ratio",
+      "watch": 1.2,
+      "alert": 1.4
+    },
+    "basis": "assumption",
+    "needsReview": true,
+    "sourceId": "nasa-risks",
+    "hazardIds": [],
+    "whyItMatters": "The challenge names blood sugar as a core health indicator. A lasting change from your own baseline is worth a closer look.",
+    "howToMeasure": "Fasting reading, taken before breakfast.",
+    "actions": {
+      "watch": [
+        {
+          "text": "Repeat the fasting reading tomorrow and note what you ate today.",
+          "basis": "assumption",
+          "needsReview": true
+        }
+      ],
+      "alert": [
+        {
+          "text": "Repeat the reading now. If it stays this far from baseline, follow the mission medical protocol.",
+          "basis": "assumption",
+          "needsReview": true
+        }
+      ]
+    }
+  },
+  {
+    "id": "bodyTempC",
+    "name": "Body temperature",
+    "unit": "°C",
+    "agent": "biometric",
+    "input": {
+      "min": 33,
+      "max": 42,
+      "step": 0.1
+    },
+    "rule": {
+      "direction": "both",
+      "mode": "abs",
+      "watch": 0.6,
+      "alert": 1.1
+    },
+    "basis": "assumption",
+    "needsReview": true,
+    "sourceId": "nasa-hazards",
+    "hazardIds": [
+      "hostile-closed"
+    ],
+    "whyItMatters": "NASA lists temperature among the habitability factors of a closed spacecraft. A lasting change from your own baseline is worth a closer look.",
+    "howToMeasure": "Use the thermometer at the same time each day.",
+    "actions": {
+      "watch": [
+        {
+          "text": "Repeat the temperature reading in an hour.",
+          "basis": "assumption",
+          "needsReview": true
+        }
+      ],
+      "alert": [
+        {
+          "text": "Repeat the temperature reading now. If it stays this far from baseline, follow the mission medical protocol.",
+          "basis": "assumption",
+          "needsReview": true
+        }
+      ]
     }
   }
 ]

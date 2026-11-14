@@ -6,7 +6,7 @@ ASTRA creates a digital twin of each astronaut that evolves during the mission. 
 
 **Prototype. Not a medical device. All crew data is simulated.**
 
-- Team: TODO(team): team name and members
+- Team: TODO(team): fill in `src/data/team.json` (tagline, team name, members); the site shows them once set
 - Live site: TODO(team): link once the repository is public and the site is deployed
 - Concept: [docs/CONCEPT.md](docs/CONCEPT.md) · Design: [docs/DESIGN.md](docs/DESIGN.md) · Plan: [PLAN.md](PLAN.md)
 
@@ -16,11 +16,11 @@ ASTRA creates a digital twin of each astronaut that evolves during the mission. 
 |---|---|---|
 | Gather | Log readings (`/#/app/log`) | Type today's readings over the simulated telemetry. Each field explains why it matters, how to measure it and which spaceflight hazard it relates to. |
 | Evaluate | Twin (`/#/app`) | A 2D figure shows muscle, bone, cardiovascular system and circadian rhythm. Every reading is compared with the astronaut's own baseline. |
-| Act | Twin and Projection (`/#/app/projection`) | The Medical Advisor lists actions for everything that is not nominal. "See projected effect" opens the 30-day projection with that change applied. |
+| Act | Twin and Projection (`/#/app/projection`) | The Medical Advisor lists actions for everything that is not nominal and says who to involve: the astronaut, the crew medical officer, or the flight surgeons on the ground. "See projected effect" opens the 30-day projection with that change applied. |
 
 The landing page (`/#/`) explains the solution and leads into the tool.
 
-The five agents (Biometric, Physiology, Environment, Prediction, Medical Advisor) are rule-based TypeScript modules in `src/domain/`. No language model runs in the product and nothing leaves the browser.
+The five agents (Biometric, Physiology, Environment, Prediction, Medical Advisor) are TypeScript modules in `src/domain/`. They apply rules from sourced files. The Biometric Agent also runs one small machine-learning model, the pattern check: it learns each astronaut's normal from their own baseline days and flags days when readings that each look fine are unusual together. No language model runs in the product and nothing leaves the browser.
 
 ## Run it
 
@@ -49,7 +49,7 @@ The build in `dist/` is a static site. It uses hash routes and relative paths, s
 - The 30-day view applies the explicit models in `models.json`. It is a simplified projection, not a prediction, and each chart shows its model, source and limits.
 - The crew and all readings are generated from a fixed seed in `src/domain/seed.ts`.
 
-Sourced so far: the five hazards (NASA Human Research Program) and the base rate of the bone model (NASA: weight-bearing bones become roughly 1% less dense per month without countermeasures). Everything else is an assumption waiting for review. See [docs/REFERENCES.md](docs/REFERENCES.md).
+Sourced so far: the five hazards (NASA Human Research Program), the base rate of the bone model (NASA: weight-bearing bones become roughly 1% less dense per month without countermeasures) and the neutron share of the radiation dose (Canadian Space Agency). Everything else is an assumption waiting for review. See [docs/REFERENCES.md](docs/REFERENCES.md).
 
 ## Structure
 
@@ -67,7 +67,7 @@ src/landing/          landing page
 
 ## Use of AI
 
-Parts of the code, tests and text were written with an AI assistant (Claude Code) and reviewed by the team. The solution concept is the team's. Every use is logged in [docs/AI_USAGE.md](docs/AI_USAGE.md). AI-written source files start with a comment saying so. No AI-generated images are used: the figure and charts are drawn in SVG by code.
+Parts of the code, tests and text were written with an AI assistant (Claude Code) and reviewed by the team. The solution concept is the team's. Every use is logged in [docs/AI_USAGE.md](docs/AI_USAGE.md). AI-written source files start with a comment saying so. No AI-generated images are used: the figure and charts are drawn in SVG by code. The product itself contains one machine-learning component, the pattern check described above; it is trained only on simulated data and is disclosed as such.
 
 ## Credits
 

@@ -1,47 +1,116 @@
 [
   {
-    "id": "bone-density", "output": "bone", "inputs": ["exerciseMin"], "form": "linear-rate",
+    "id": "bone-density",
+    "output": "bone",
+    "inputs": [
+      "exerciseMin"
+    ],
+    "form": "linear-rate",
     "description": "Bone mineral density falls at a steady monthly rate in microgravity. Daily resistive exercise slows that rate, up to a ceiling.",
-    "parameters": { "lossPctPerMonth": 1, "fullProtectionAt": 60, "maxProtection": 0.8 },
-    "parameterBasis": { "lossPctPerMonth": "nasa", "fullProtectionAt": "assumption", "maxProtection": "assumption" },
+    "parameters": {
+      "lossPctPerMonth": 1,
+      "fullProtectionAt": 60,
+      "maxProtection": 0.8
+    },
+    "parameterBasis": {
+      "lossPctPerMonth": "nasa",
+      "fullProtectionAt": "assumption",
+      "maxProtection": "assumption"
+    },
     "horizonDays": 30,
     "limits": "The base rate is NASA's figure for weight-bearing bones without countermeasures. How much exercise slows it is our assumption. Diet, medication, the bone site and individual differences are left out.",
-    "basis": "nasa", "sourceId": "nasa-bone-muscle", "needsReview": true
+    "basis": "nasa",
+    "sourceId": "nasa-bone-muscle",
+    "needsReview": true
   },
   {
-    "id": "muscle-strength", "output": "muscle", "inputs": ["exerciseMin"], "form": "linear-rate",
+    "id": "muscle-strength",
+    "output": "muscle",
+    "inputs": [
+      "exerciseMin"
+    ],
+    "form": "linear-rate",
     "description": "Muscle strength falls at a steady monthly rate in microgravity. Daily resistive exercise slows that rate, up to a ceiling.",
-    "parameters": { "lossPctPerMonth": 2, "fullProtectionAt": 60, "maxProtection": 0.8 },
-    "parameterBasis": { "lossPctPerMonth": "assumption", "fullProtectionAt": "assumption", "maxProtection": "assumption" },
+    "parameters": {
+      "lossPctPerMonth": 2,
+      "fullProtectionAt": 60,
+      "maxProtection": 0.8
+    },
+    "parameterBasis": {
+      "lossPctPerMonth": "assumption",
+      "fullProtectionAt": "assumption",
+      "maxProtection": "assumption"
+    },
     "horizonDays": 30,
     "limits": "NASA reports that muscles weaken in microgravity but this page gives no rate, so every number here is an assumption. Muscle group, diet and individual differences are left out.",
-    "basis": "assumption", "sourceId": "nasa-bone-muscle", "needsReview": true
+    "basis": "assumption",
+    "sourceId": "nasa-bone-muscle",
+    "needsReview": true
   },
   {
-    "id": "cardio-fitness", "output": "cardio", "inputs": ["exerciseMin"], "form": "linear-rate",
+    "id": "cardio-fitness",
+    "output": "cardio",
+    "inputs": [
+      "exerciseMin"
+    ],
+    "form": "linear-rate",
     "description": "Aerobic fitness falls at a steady monthly rate without exercise. Daily exercise slows that rate, up to a ceiling.",
-    "parameters": { "lossPctPerMonth": 1.5, "fullProtectionAt": 60, "maxProtection": 0.9 },
-    "parameterBasis": { "lossPctPerMonth": "assumption", "fullProtectionAt": "assumption", "maxProtection": "assumption" },
+    "parameters": {
+      "lossPctPerMonth": 1.5,
+      "fullProtectionAt": 60,
+      "maxProtection": 0.9
+    },
+    "parameterBasis": {
+      "lossPctPerMonth": "assumption",
+      "fullProtectionAt": "assumption",
+      "maxProtection": "assumption"
+    },
     "horizonDays": 30,
     "limits": "Every number here is an assumption. Aerobic exercise, fluid shifts and individual differences are left out.",
-    "basis": "assumption", "sourceId": "nasa-risks", "needsReview": true
+    "basis": "assumption",
+    "sourceId": "nasa-risks",
+    "needsReview": true
   },
   {
-    "id": "circadian-sleep-debt", "output": "circadian", "inputs": ["sleepHours"], "form": "rolling-deficit",
+    "id": "circadian-sleep-debt",
+    "output": "circadian",
+    "inputs": [
+      "sleepHours"
+    ],
+    "form": "rolling-deficit",
     "description": "Sleep debt is the sleep you missed over the last 7 days: for each night, the hours below your sleep need.",
-    "parameters": { "needHours": 8, "windowDays": 7 },
-    "parameterBasis": { "needHours": "assumption", "windowDays": "assumption" },
+    "parameters": {
+      "needHours": 8,
+      "windowDays": 7
+    },
+    "parameterBasis": {
+      "needHours": "assumption",
+      "windowDays": "assumption"
+    },
     "horizonDays": 30,
     "limits": "The sleep need is an assumed value, the same for everyone. Sleep quality, light exposure, shift changes and workload are left out.",
-    "basis": "assumption", "sourceId": "nasa-sleep-risk", "needsReview": true
+    "basis": "assumption",
+    "sourceId": "nasa-sleep-risk",
+    "needsReview": true
   },
   {
-    "id": "radiation-cumulative", "output": "radiation", "inputs": ["radiationDose"], "form": "cumulative-sum",
-    "description": "Mission dose is the sum of every daily dose since launch.",
-    "parameters": {},
-    "parameterBasis": {},
+    "id": "radiation-cumulative",
+    "output": "radiation",
+    "inputs": [
+      "radiationDose"
+    ],
+    "form": "cumulative-sum",
+    "description": "Mission dose is the sum of every daily dose since launch. An estimated share of it comes from neutrons.",
+    "parameters": {
+      "neutronShare": 0.3
+    },
+    "parameterBasis": {
+      "neutronShare": "partner"
+    },
     "horizonDays": 30,
-    "limits": "This is arithmetic on the dosimeter readings. It has no status bands because we have not verified a dose limit from a source yet. Solar particle events are not forecast.",
-    "basis": "nasa", "sourceId": "nasa-radiation", "needsReview": false
+    "limits": "The total is arithmetic on the dosimeter readings. The neutron share is the Canadian Space Agency's figure for the International Space Station; a deep-space mission may differ. There are no status bands because we have not verified a dose limit from a source yet. Solar particle events are not forecast.",
+    "basis": "partner",
+    "sourceId": "csa-radiation",
+    "needsReview": false
   }
 ]

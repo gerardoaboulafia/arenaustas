@@ -12,8 +12,8 @@ export const sources = sourcesJson as Source[];
 export const hazards = hazardsJson as Hazard[];
 export const indicators = indicatorsJson as Indicator[];
 export const systems = systemsJson as SystemDef[];
-export const models = modelsJson as ProjectionModel[];
-export const rules = rulesJson as Rules;
+export const models = modelsJson as unknown as ProjectionModel[];
+export const rules = rulesJson as unknown as Rules;
 
 export const sourceById = (id?: string) => sources.find((s) => s.id === id);
 export const hazardById = (id: string) => hazards.find((h) => h.id === id);

@@ -2,10 +2,11 @@
 // Builds the digital twin for one astronaut on one mission day by running the five
 // rule-based agents in order. Same input, same output: no network, no language model.
 import { SEVERITY, evaluateIndicator, format, measureStatus } from './evaluate';
+import { patternCheck } from './anomaly';
 import { habit, project } from './project';
 import { indicators, modelById, rules, systems } from './knowledge';
 import type {
-  Advice, CrewMember, Dataset, IndicatorResult, Scenario, Status, SystemResult, TraceEntry, Twin, WhatIfInput,
+  Advice, CrewMember, Dataset, Escalation, IndicatorResult, PatternResult, Scenario, Status, SystemResult, TraceEntry, Twin, WhatIfInput,
 } from './types';
 
 const STATUS_WORD: Record<Status, string> = { nominal: 'nominal', watch: 'on watch', alert: 'on alert', 'no-data': 'without enough data' };
@@ -33,8 +34,27 @@ function buildSystems(crew: CrewMember, dayIndex: number, scenario: Scenario): S
   });
 }
 
-function buildAdvice(indicatorResults: IndicatorResult[], systemResults: SystemResult[]): Advice[] {
-  const advice: Advice[] = [];
+function describe(pattern: PatternResult): string {
+  return pattern.contributors.slice(0, 3)
+    .map((c) => `${indicators.find((i) => i.id === c.id)?.name.toLowerCase()} (${format(Math.abs(c.z))} SD ${c.z < 0 ? 'below' : 'above'} your normal)`)
+    .join(', ');
+}
+
+function buildAdvice(
+  indicatorResults: IndicatorResult[], systemResults: SystemResult[], pattern: PatternResult, alertDaysOf: (key: string) => number,
+): Advice[] {
+  const advice: Omit<Advice, 'alertDays' | 'escalate'>[] = [];
+  if (pattern.status === 'watch') {
+    const alone = !indicatorResults.some((r) => r.status === 'watch' || r.status === 'alert');
+    advice.push({
+      key: 'pattern',
+      status: 'watch',
+      title: 'Your readings together are unusual for you',
+      explanation: `${alone ? 'No single reading crossed its line. ' : ''}${pattern.reason} Main contributors: ${describe(pattern)}.`,
+      actions: [rules.pattern.action],
+      agent: 'Biometric Agent',
+    });
+  }
   for (const r of indicatorResults) {
     if (r.status !== 'watch' && r.status !== 'alert') continue;
     advice.push({
@@ -75,30 +95,44 @@ function buildAdvice(indicatorResults: IndicatorResult[], systemResults: SystemR
   // Alert first; the same action is not listed twice.
   advice.sort((a, b) => SEVERITY[b.status] - SEVERITY[a.status]);
   const seen = new Set<string>();
-  return advice.map((item) => ({
-    ...item,
-    actions: item.actions.filter((action) => (seen.has(action.text) ? false : (seen.add(action.text), true))),
-  }));
+  // Escalation ladder: watch stays with the astronaut, an alert goes to the crew medical officer,
+  // and an alert that persists goes to the ground. The day count is in rules.json.
+  return advice.map((item) => {
+    const alertDays = item.status === 'alert' ? alertDaysOf(item.key) : 0;
+    return {
+      ...item,
+      alertDays,
+      escalate: item.status !== 'alert' ? 'self' : alertDays >= rules.escalation.groundAfterAlertDays ? 'ground' : 'crew',
+      actions: item.actions.filter((action) => (seen.has(action.text) ? false : (seen.add(action.text), true))),
+    };
+  });
 }
 
-function buildSummary(indicatorResults: IndicatorResult[], systemResults: SystemResult[]): string {
+function buildSummary(indicatorResults: IndicatorResult[], systemResults: SystemResult[], pattern: PatternResult): string {
   const flagged = [
     ...systemResults.filter((s) => s.status === 'alert' || s.status === 'watch').map((s) => `${s.system.name.toLowerCase()} is ${STATUS_WORD[s.status]}`),
     ...indicatorResults.filter((r) => r.status === 'alert' || r.status === 'watch').map((r) => `${r.indicator.name.toLowerCase()} is ${STATUS_WORD[r.status]}`),
   ];
+  if (!flagged.length && pattern.status === 'watch') {
+    return 'Every reading is inside its own limits, but the pattern they form together is unusual for you.';
+  }
   if (!flagged.length) return 'Everything is nominal against your own baseline.';
   const text = flagged.slice(0, 3).join(', ');
   const more = flagged.length > 3 ? `, and ${flagged.length - 3} more` : '';
   return `${text.charAt(0).toUpperCase()}${text.slice(1)}${more}. Everything else is nominal.`;
 }
 
-function buildTrace(indicatorResults: IndicatorResult[], systemResults: SystemResult[], advice: Advice[]): TraceEntry[] {
+function buildTrace(indicatorResults: IndicatorResult[], systemResults: SystemResult[], advice: Advice[], pattern: PatternResult): TraceEntry[] {
   const list = (rs: IndicatorResult[]) => rs.map((r) => `${r.indicator.name}: ${r.status}`).join('; ');
   const biometric = indicatorResults.filter((r) => r.indicator.agent === 'biometric');
   const environment = indicatorResults.filter((r) => r.indicator.agent === 'environment');
   const compare = `Mean of the last ${rules.recentDays} days against the mean of the first ${rules.baselineDays} days on record; thresholds from indicators.json.`;
   return [
-    { agent: 'Biometric Agent', input: `${biometric.length} wearable indicators`, rule: compare, output: list(biometric) },
+    {
+      agent: 'Biometric Agent', input: `${biometric.length} wearable indicators`,
+      rule: `${compare} Plus a pattern model learned from the baseline days (mean and covariance; a day is unusual when it is farther from normal than any baseline day, ${rules.pattern.persistDays} days running).`,
+      output: `${list(biometric)}; pattern check: ${pattern.status}${pattern.ratio === null ? '' : ` (${format(pattern.ratio, 2)}x baseline reach)`}`,
+    },
     { agent: 'Environment Agent', input: `${environment.length} cabin and dosimeter indicators`, rule: compare, output: list(environment) },
     {
       agent: 'Physiology Agent', input: 'Readings history and the models in models.json',
@@ -112,8 +146,8 @@ function buildTrace(indicatorResults: IndicatorResult[], systemResults: SystemRe
     },
     {
       agent: 'Medical Advisor', input: 'Every status that is not nominal',
-      rule: 'Picks the matching actions from indicators.json, alert first. No text is generated.',
-      output: advice.length ? `${advice.length} finding(s), ${advice.reduce((n, a) => n + a.actions.length, 0)} action(s)` : 'Nothing to act on',
+      rule: `Picks the matching actions from the knowledge files, alert first. Watch stays with you, an alert goes to the crew medical officer, an alert lasting ${rules.escalation.groundAfterAlertDays} days or more goes to the ground. No text is generated.`,
+      output: advice.length ? `${advice.length} finding(s), ${advice.reduce((n, a) => n + a.actions.length, 0)} action(s); involve: ${rules.escalation.short[topEscalation(advice)]}` : 'Nothing to act on',
     },
   ];
 }
@@ -127,23 +161,53 @@ export function buildTwin(dataset: Dataset, crewId: string, missionDay: number, 
   const radiation = project(
     modelById('radiation-cumulative'), crew.readings.radiationDose ?? [], crew.start.radiation ?? 0, dayIndex, rules, scenario.radiationDose,
   );
-  const advice = buildAdvice(indicatorResults, systemResults);
+  const pattern = patternCheck(crew.readings, dayIndex, rules);
+  const alertDaysOf = (key: string): number => {
+    const [kind, id] = key.split(':');
+    let days = 0;
+    if (kind === 'indicator') {
+      const indicator = indicators.find((i) => i.id === id);
+      for (let d = dayIndex; indicator && d >= 0 && evaluateIndicator(indicator, crew.readings[id] ?? [], d, rules).status === 'alert'; d--) days++;
+    } else if (kind === 'system') {
+      const result = systemResults.find((x) => x.system.id === id);
+      const past = result?.projection.history ?? [];
+      for (let d = past.length - 1; result && d >= 0 && measureStatus(result.system.measure, past[d]) === 'alert'; d--) days++;
+    }
+    return days;
+  };
+  const advice = buildAdvice(indicatorResults, systemResults, pattern, alertDaysOf);
   const habitOf = (id: WhatIfInput) => habit(crew.readings[id] ?? [], dayIndex, rules);
   return {
     crew,
     missionDay: day,
     indicators: indicatorResults,
     systems: systemResults,
+    pattern,
     radiation,
     habits: { sleepHours: habitOf('sleepHours'), exerciseMin: habitOf('exerciseMin'), radiationDose: habitOf('radiationDose') },
     advice,
-    summary: buildSummary(indicatorResults, systemResults),
-    trace: buildTrace(indicatorResults, systemResults, advice),
+    summary: buildSummary(indicatorResults, systemResults, pattern),
+    trace: buildTrace(indicatorResults, systemResults, advice, pattern),
   };
 }
 
-/** Worst status across indicators and body systems, for the crew selector. */
+/** The highest rung of the escalation ladder among the findings. */
+export function topEscalation(advice: Advice[]): Escalation {
+  return advice.some((a) => a.escalate === 'ground') ? 'ground' : advice.some((a) => a.escalate === 'crew') ? 'crew' : 'self';
+}
+
+/** Worst status across indicators, body systems and the pattern check, for the crew selector. */
 export function overallStatus(twin: Twin): Status {
-  const all = [...twin.indicators.map((r) => r.status), ...twin.systems.map((s) => s.status)];
+  const all = [...twin.indicators.map((r) => r.status), ...twin.systems.map((s) => s.status), twin.pattern.status === 'watch' ? 'watch' as Status : 'nominal' as Status];
   return all.reduce<Status>((worst, s) => (SEVERITY[s] > SEVERITY[worst] ? s : worst), 'nominal');
+}
+
+/** Status of every body system on each day of a range: how the twin has evolved. */
+export function systemTimeline(dataset: Dataset, crewId: string, fromDay: number, toDay: number): { day: number; statuses: Record<string, Status> }[] {
+  const out: { day: number; statuses: Record<string, Status> }[] = [];
+  for (let day = fromDay; day <= toDay; day++) {
+    const twin = buildTwin(dataset, crewId, day);
+    out.push({ day, statuses: Object.fromEntries(twin.systems.map((s) => [s.system.id, s.status])) });
+  }
+  return out;
 }

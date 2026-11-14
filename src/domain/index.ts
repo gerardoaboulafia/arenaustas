@@ -2,6 +2,7 @@
 export * from './types';
 export * from './knowledge';
 export * from './evaluate';
+export * from './anomaly';
 export * from './project';
 export * from './seed';
 export * from './storage';

@@ -4,43 +4,78 @@
 /* Palette from the team's first prototype: deep navy, calm blue panels, one cyan accent.
    The three status colors are used for status and nothing else. */
 @theme {
-  --color-bg: #07111f;
-  --color-panel: #0c1a2b;
+  --color-bg: #050c17;
+  --color-panel: #0b1828;
   --color-panel2: #102238;
-  --color-line: #21374b;
+  --color-line: #1e3449;
   --color-ink: #ebf6fa;
   --color-muted: #9baec0;
   --color-accent: #58d8e8;
   --color-nominal: #80d6b3;
   --color-watch: #e6ac55;
   --color-alert: #ff8a73;
-  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --font-sans: "Inter Variable", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-display: "Space Grotesk Variable", "Inter Variable", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
 html {
   scroll-behavior: smooth;
+  background: var(--color-bg);
 }
 
 body {
   margin: 0;
-  background-color: var(--color-bg);
-  background-image:
-    linear-gradient(rgba(88, 216, 232, 0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(88, 216, 232, 0.035) 1px, transparent 1px);
-  background-size: 48px 48px;
   color: var(--color-ink);
   font-family: var(--font-sans);
   font-size: 15px;
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
+  background-color: var(--color-bg);
+  /* A quiet star field and a faint instrument grid. Decorative only. */
+  background-image:
+    radial-gradient(1px 1px at 12% 18%, rgba(235, 246, 250, 0.55) 50%, transparent 51%),
+    radial-gradient(1px 1px at 78% 8%, rgba(235, 246, 250, 0.45) 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 42% 62%, rgba(235, 246, 250, 0.35) 50%, transparent 51%),
+    radial-gradient(1px 1px at 88% 74%, rgba(235, 246, 250, 0.5) 50%, transparent 51%),
+    radial-gradient(1px 1px at 26% 88%, rgba(235, 246, 250, 0.4) 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 62% 34%, rgba(88, 216, 232, 0.5) 50%, transparent 51%),
+    radial-gradient(900px 520px at 70% -10%, rgba(88, 216, 232, 0.09), transparent 70%),
+    radial-gradient(700px 480px at 0% 30%, rgba(60, 110, 200, 0.08), transparent 70%),
+    linear-gradient(rgba(88, 216, 232, 0.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(88, 216, 232, 0.028) 1px, transparent 1px);
+  background-size: 520px 520px, 640px 640px, 460px 460px, 700px 700px, 580px 580px, 820px 820px, 100% 100%, 100% 100%, 56px 56px, 56px 56px;
+  background-attachment: fixed;
+}
+
+h1, h2, h3, .font-display {
+  font-family: var(--font-display);
+}
+
+.panel {
+  border: 1px solid var(--color-line);
+  border-radius: 20px;
+  background: linear-gradient(180deg, rgba(16, 34, 56, 0.78), rgba(11, 24, 40, 0.82));
+  box-shadow: inset 0 1px 0 rgba(235, 246, 250, 0.05), 0 24px 48px -28px rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(10px);
+}
+
+.inset {
+  border: 1px solid var(--color-line);
+  border-radius: 14px;
+  background: rgba(5, 12, 23, 0.55);
+}
+
+.glow-accent {
+  box-shadow: 0 0 0 1px rgba(88, 216, 232, 0.55), 0 0 28px -6px rgba(88, 216, 232, 0.45);
 }
 
 a:focus-visible,
 button:focus-visible,
 input:focus-visible,
 select:focus-visible,
-summary:focus-visible {
+summary:focus-visible,
+[tabindex]:focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 3px;
 }
@@ -55,8 +90,51 @@ input[type="range"] {
   accent-color: var(--color-accent);
 }
 
+input[type="number"]::-webkit-inner-spin-button {
+  opacity: 0.4;
+}
+
+@keyframes scan {
+  0% { transform: translateY(-8%); opacity: 0; }
+  12% { opacity: 1; }
+  88% { opacity: 1; }
+  100% { transform: translateY(108%); opacity: 0; }
+}
+@keyframes beat {
+  0%, 100% { transform: scale(1); }
+  14% { transform: scale(1.22); }
+  28% { transform: scale(1); }
+  42% { transform: scale(1.14); }
+  56% { transform: scale(1); }
+}
+@keyframes ring {
+  0% { transform: scale(0.6); opacity: 0.9; }
+  100% { transform: scale(2.1); opacity: 0; }
+}
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
+}
+@keyframes flow {
+  to { stroke-dashoffset: -24; }
+}
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes drift {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.anim-scan { animation: scan 5.5s linear infinite; }
+.anim-beat { animation: beat 1.3s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+.anim-ring { animation: ring 2.2s ease-out infinite; transform-box: fill-box; transform-origin: center; }
+.anim-spin { animation: spin-slow 40s linear infinite; transform-box: fill-box; transform-origin: center; }
+.anim-flow { animation: flow 1.6s linear infinite; }
+.anim-rise { animation: rise 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.anim-drift { animation: drift 7s ease-in-out infinite; }
+
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
+  html { scroll-behavior: auto; }
+  .anim-scan, .anim-beat, .anim-ring, .anim-spin, .anim-flow, .anim-rise, .anim-drift { animation: none; }
 }

@@ -9,11 +9,18 @@ The ideas in this file are the team's. On 2026-11-13 the team shared seven candi
 
 1. Final name (ASTRA or Aegis-Bio) and a tagline.
 2. Team name and members.
-3. Decided by the team on 2026-11-13: ASTRA's five agents are rule-based modules, not LLM-powered (see §10).
+3. Decided by the team on 2026-11-13: ASTRA's five agents are rule-based modules, not LLM-powered (see §10). Updated on 2026-11-14: a team member asked to add machine learning where possible. The Biometric Agent now also runs a small statistical model learned from each astronaut's own baseline readings. The Medical Advisor stays rule-based and no LLM is used.
 4. NASA's brief names blood pressure, blood sugar, body temperature and mood. Our notes do not. Include any? Without mood, behavioral health is not covered.
 5. When does ASTRA tell the astronaut to involve a crewmate or the flight surgeons on the ground? The brief asks this and our notes do not answer it.
 6. Where does NASA data enter the product (§6)?
 7. Demo format (§9).
+
+Decisions made by Claude on 2026-11-14. A team member delegated them ("you are in charge, you make the decisions"). They are scoping choices inside the team's concept, not new ideas, and the team can reverse any of them:
+
+- Decision 4: all four indicators named in NASA's brief are included: blood pressure, blood sugar, body temperature and mood. Mood covers behavioral health.
+- Decision 5: escalation ladder. Watch: the astronaut acts alone. Alert: the crew medical officer is involved. An alert lasting four days or more: reported to the flight surgeons in the next scheduled message to the ground. The day count is an assumption that needs review.
+- Decisions 1 and 2 stay with the team. The site shows no tagline and no team section until `src/data/team.json` is filled in.
+- Decisions 6 and 7 are not changed here.
 
 ## 1. Identity (required)
 

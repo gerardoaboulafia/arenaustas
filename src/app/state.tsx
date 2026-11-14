@@ -12,6 +12,8 @@ interface Mission {
   minDay: number;
   setDay: (day: number) => void;
   twin: Twin;
+  /** One twin per crew member on the current day, for the crew selector. */
+  crewTwins: Twin[];
   scenario: Scenario;
   setWhatIf: (input: WhatIfInput, value: number | undefined) => void;
   resetScenario: () => void;
@@ -34,7 +36,11 @@ export function MissionProvider({ children }: { children: ReactNode }) {
   const [scenarios, setScenarios] = useState<Record<string, Scenario>>({});
   const [focusSystem, setFocusSystem] = useState<string | null>(null);
   const scenario = useMemo(() => scenarios[crewId] ?? {}, [scenarios, crewId]);
-  const twin = useMemo(() => buildTwin(dataset, crewId, day, scenario), [dataset, crewId, day, scenario]);
+  const crewTwins = useMemo(
+    () => dataset.crew.map((c) => buildTwin(dataset, c.id, day, scenarios[c.id] ?? {})),
+    [dataset, day, scenarios],
+  );
+  const twin = crewTwins.find((t) => t.crew.id === crewId) ?? crewTwins[0];
 
   const setWhatIf = useCallback((input: WhatIfInput, value: number | undefined) => {
     setScenarios((all) => {
@@ -61,7 +67,7 @@ export function MissionProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const value: Mission = {
-    dataset, crewId, setCrewId, day, minDay: base.firstDay + rules.baselineDays, setDay, twin, scenario, setWhatIf, resetScenario,
+    dataset, crewId, setCrewId, day, minDay: base.firstDay + rules.baselineDays, setDay, twin, crewTwins, scenario, setWhatIf, resetScenario,
     focusSystem, setFocusSystem, overrides, setReading, resetReadings,
   };
   return <MissionContext.Provider value={value}>{children}</MissionContext.Provider>;

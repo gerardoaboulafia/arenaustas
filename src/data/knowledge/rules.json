@@ -6,5 +6,43 @@
   "habitDays": 7,
   "basis": "assumption",
   "needsReview": true,
-  "note": "Each astronaut is compared with their own baseline: the mean of the last 3 days against the mean of the first 14 days on record. A single odd reading does not change a status. Pattern taken from the team's first prototype."
+  "note": "Each astronaut is compared with their own baseline: the mean of the last 3 days against the mean of the first 14 days on record. A single odd reading does not change a status. Pattern taken from the team's first prototype.",
+  "pattern": {
+    "features": [
+      "restingHr",
+      "sleepHours",
+      "hrvMs",
+      "spo2",
+      "skinTempC",
+      "exerciseMin"
+    ],
+    "shrinkage": 0.5,
+    "minBaselineDays": 10,
+    "persistDays": 3,
+    "unusualAt": 1,
+    "basis": "assumption",
+    "needsReview": true,
+    "note": "A statistical model learned from each astronaut's own baseline days. It has only seen simulated data. It can raise a watch, never an alert.",
+    "action": {
+      "text": "Look at the listed readings together and repeat any that seem off. No single one has to be wrong for the pattern to matter.",
+      "basis": "assumption",
+      "needsReview": true
+    }
+  },
+  "escalation": {
+    "groundAfterAlertDays": 4,
+    "labels": {
+      "self": "You can act on this yourself",
+      "crew": "Involve the crew medical officer",
+      "ground": "Report it to the flight surgeons in the next message to the ground"
+    },
+    "short": {
+      "self": "You",
+      "crew": "Crew medical officer",
+      "ground": "Flight surgeons on the ground"
+    },
+    "basis": "assumption",
+    "needsReview": true,
+    "note": "Watch: the astronaut acts alone. Alert: the crew medical officer is involved. An alert that lasts this many days goes to the ground, in a scheduled message, because a Mars-class mission cannot count on a live conversation with Earth."
+  }
 }

@@ -1,6 +1,6 @@
 // AI-assisted: written with Claude Code, reviewed by the team.
 import { useEffect, useState } from 'react';
-import { Link, NavLink, Outlet } from 'react-router-dom';
+import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 import { Logo, SimulatedBadge } from '../components/ui/primitives';
 import { useMission } from './state';
 
@@ -45,6 +45,12 @@ function DayControl() {
 
 export function AppLayout() {
   const { dataset, crewId, setCrewId } = useMission();
+  const { pathname } = useLocation();
+  // Each screen opens at its top.
+  useEffect(() => {
+    // Braces matter: newer browsers return a promise from scrollTo, and an effect must not return one.
+    window.scrollTo(0, 0);
+  }, [pathname]);
   return (
     <div className="flex min-h-screen flex-col">
       <header className="sticky top-0 z-10 border-b border-line bg-bg/95 backdrop-blur">

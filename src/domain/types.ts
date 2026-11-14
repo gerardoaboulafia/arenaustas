@@ -97,6 +97,44 @@ export interface Rules {
   basis: Basis;
   needsReview: boolean;
   note: string;
+  pattern: PatternConfig;
+  escalation: {
+    groundAfterAlertDays: number;
+    labels: Record<Escalation, string>;
+    short: Record<Escalation, string>;
+    basis: Basis;
+    needsReview: boolean;
+    note: string;
+  };
+}
+
+/** Who has to be involved: the astronaut, the crew medical officer, or the flight surgeons on the ground. */
+export type Escalation = 'self' | 'crew' | 'ground';
+
+/** Settings of the learned pattern model (src/domain/anomaly.ts). */
+export interface PatternConfig {
+  features: string[];
+  shrinkage: number;
+  minBaselineDays: number;
+  persistDays: number;
+  /** A day is unusual when its distance is at least this many times the farthest baseline day. */
+  unusualAt: number;
+  basis: Basis;
+  needsReview: boolean;
+  note: string;
+  action: ActionDef;
+}
+
+export interface PatternResult {
+  /** nominal, watch or no-data. The model never raises an alert. */
+  status: Status;
+  /** Today's distance from normal, divided by the farthest baseline day. */
+  ratio: number | null;
+  history: (number | null)[];
+  /** Indicators ordered by how much of today's distance they explain; z is in baseline standard deviations. */
+  contributors: { id: string; z: number; share: number }[];
+  trainedOn: number;
+  reason: string;
 }
 
 export type Series = (number | null)[];
@@ -160,6 +198,9 @@ export interface Advice {
   actions: ActionDef[];
   sourceId?: string;
   agent: AgentName;
+  /** Consecutive days this item has been on alert, counting today. */
+  alertDays: number;
+  escalate: Escalation;
 }
 
 export interface TraceEntry {
@@ -174,6 +215,7 @@ export interface Twin {
   missionDay: number;
   indicators: IndicatorResult[];
   systems: SystemResult[];
+  pattern: PatternResult;
   radiation: Projection;
   habits: Record<WhatIfInput, number>;
   advice: Advice[];

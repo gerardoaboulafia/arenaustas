@@ -44,10 +44,10 @@ export function Card({ title, agent, action, children, className = '' }: {
   title?: string; agent?: AgentName; action?: ReactNode; children: ReactNode; className?: string;
 }) {
   return (
-    <section className={`min-w-0 rounded-2xl border border-line bg-panel p-5 ${className}`}>
+    <section className={`panel min-w-0 p-5 ${className}`}>
       {(title || agent || action) && (
         <header className="mb-4 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-          {title && <h2 className="text-base font-semibold">{title}</h2>}
+          {title && <h2 className="text-[17px] font-semibold tracking-tight">{title}</h2>}
           <div className="flex items-center gap-3">
             {agent && <AgentTag agent={agent} />}
             {action}
@@ -104,12 +104,12 @@ export function Logo() {
         <circle cx="10" cy="10" r="8" />
         <circle cx="20" cy="10" r="8" strokeDasharray="2.6 2.6" className="text-accent" stroke="currentColor" />
       </svg>
-      <span className="text-lg font-bold tracking-[0.18em]">ASTRA</span>
+      <span className="font-display text-lg font-bold tracking-[0.22em]">ASTRA</span>
     </span>
   );
 }
 
 export const buttonPrimary =
-  'inline-flex min-h-11 items-center justify-center rounded-lg bg-accent px-4 text-sm font-semibold text-bg hover:bg-ink transition-colors';
+  'inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-accent px-5 text-sm font-semibold text-bg shadow-[0_0_32px_-8px_rgba(88,216,232,0.7)] transition hover:bg-ink hover:shadow-[0_0_36px_-6px_rgba(235,246,250,0.6)]';
 export const buttonSecondary =
-  'inline-flex min-h-11 items-center justify-center rounded-lg border border-line bg-panel2 px-4 text-sm font-semibold text-ink hover:border-accent transition-colors';
+  'inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-line bg-panel2/80 px-5 text-sm font-semibold text-ink transition hover:border-accent hover:text-accent';

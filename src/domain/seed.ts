@@ -58,6 +58,12 @@ const common = (overrides: Record<string, Partial<Channel>>, bases: Record<strin
     exerciseMin: { base: bases.exerciseMin, noise: 4, decimals: 0 },
     cabinCo2: { base: 2.6, noise: 0.12, decimals: 2 },
     radiationDose: { base: 0.55, noise: 0.05, decimals: 2 },
+    // Added after the first eight, so their seeded values stay the same.
+    mood: { base: bases.mood ?? 4, noise: 0.6, decimals: 0 },
+    systolicBp: { base: bases.systolicBp ?? 118, noise: 4, decimals: 0 },
+    diastolicBp: { base: bases.diastolicBp ?? 76, noise: 3, decimals: 0 },
+    glucose: { base: bases.glucose ?? 92, noise: 5, decimals: 0 },
+    bodyTempC: { base: bases.bodyTempC ?? 36.7, noise: 0.15, decimals: 1 },
   };
   for (const [key, patch] of Object.entries(overrides)) template[key] = { ...template[key], ...patch };
   return template;
@@ -90,10 +96,25 @@ export function createDataset(): Dataset {
             hrvMs: { shift: { fromDay: 143, factor: 0.8 } },
             restingHr: { shift: { fromDay: 143, factor: 1.06 } },
             cabinCo2: { shift: { fromDay: 145, factor: 1.32 } },
+            mood: { shift: { fromDay: 144, to: 2.7 } },
           },
           { restingHr: 58, sleepHours: 7.4, hrvMs: 60, spo2: 97, skinTempC: 33.6, exerciseMin: 58 },
         ),
         { bone: 98.3, muscle: 97.4, cardio: 97.9, radiation: 65 },
+      ),
+      // Several small shifts at once, each inside its own limit: the case single-indicator rules miss.
+      member(
+        'd', 'Crew member D', 44,
+        common(
+          {
+            sleepHours: { shift: { fromDay: 143, to: 7.6 } },
+            hrvMs: { shift: { fromDay: 143, factor: 0.9 } },
+            restingHr: { shift: { fromDay: 143, factor: 1.06 } },
+            skinTempC: { shift: { fromDay: 143, to: 33.6 } },
+          },
+          { restingHr: 57, sleepHours: 8.2, hrvMs: 64, spo2: 97, skinTempC: 33.2, exerciseMin: 60 },
+        ),
+        { bone: 98.6, muscle: 97.9, cardio: 98.2, radiation: 66 },
       ),
     ],
   };

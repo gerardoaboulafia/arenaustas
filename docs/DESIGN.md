@@ -173,3 +173,23 @@ Different from §1 to §8 above:
 - No escalation label is shown on actions. When to involve a crewmate or the ground is still open decision 5.
 
 Still assumptions that need review (the tool tags each one): every indicator threshold, every action text, the status bands of the four body-system measures, the exercise effect in the bone model, and all parameters of the muscle, cardiovascular and circadian models.
+
+## 12. Machine learning and partner data
+
+Added on 2026-11-14 at a team member's request.
+
+- **Pattern check (machine learning).** Inside the Biometric Agent, `src/domain/anomaly.ts` learns each astronaut's normal from their own 14 baseline days: the mean of the six biometric indicators and how they move together (a covariance matrix, shrunk toward its diagonal because the baseline is short). Each day is scored by its Mahalanobis distance from that normal. The score is calibrated on the astronaut's own data by leave-one-out: a day is unusual when it is farther than the farthest baseline day, three days running.
+- **Why it earns its place.** It catches what single-indicator rules miss. Crew member D has four small shifts, each inside its own limit; no rule fires, and the pattern check raises a watch and names the contributors.
+- **Its limits, stated in the tool.** It has only seen simulated data, so it can raise a watch and never an alert. It is unsupervised, fitted in the browser, and deterministic. Its settings are in `rules.json` and marked as assumptions.
+- **Disclosure.** The submission guide counts machine learning as an SI tool, so this component has to be named in the "Use of Super Intelligence (SI)" field of the Project page.
+- **Partner data.** The radiation model now splits the projected mission dose with the Canadian Space Agency's figure for the neutron share on the International Space Station (about 30%). The parameter is tagged "Partner source" in the model card.
+- A fourth simulated crew member, D, was added for the case above.
+
+## 13. Indicators from the brief and the escalation ladder
+
+Added on 2026-11-14, decided by Claude after a team member delegated the open decisions.
+
+- **Indicators.** Blood pressure (systolic and diastolic), blood sugar, body temperature and mood join the first eight, so every indicator NASA's brief names is covered: 13 in total. Each uses the personal-baseline rule; every threshold is an assumption that needs review.
+- **Escalation ladder.** Each finding of the Medical Advisor says who to involve: the astronaut (watch), the crew medical officer (alert), or the flight surgeons on the ground (an alert lasting four days or more, sent in a scheduled message because a Mars-class mission cannot count on a live conversation with Earth). The rule is in `rules.json`.
+- **No placeholders on the site.** Tagline, team name and members come from `src/data/team.json` and are hidden while empty.
+

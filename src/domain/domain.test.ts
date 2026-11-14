@@ -1,8 +1,8 @@
 // AI-assisted: written with Claude Code, reviewed by the team.
 import { describe, expect, it } from 'vitest';
 import {
-  applyOverrides, buildTwin, createDataset, evaluateIndicator, fill, indicators, loadOverrides, measureStatus,
-  modelById, models, overallStatus, overrideKey, rules, simulate, sourceById, sources, systems,
+  applyOverrides, buildTwin, createDataset, evaluateIndicator, fill, indicators, invert, loadOverrides, measureStatus, patternCheck,
+  modelById, models, overallStatus, overrideKey, rules, topEscalation, simulate, sourceById, sources, systems,
 } from './index';
 import type { Indicator, Series } from './types';
 
@@ -16,6 +16,7 @@ describe('knowledge files', () => {
       if (item.sourceId) expect(sourceById(item.sourceId)).toBeDefined();
     }
     for (const s of systems) expect(s.measure.basis === 'assumption' ? s.measure.needsReview : true).toBe(true);
+    expect(rules.pattern.basis === 'assumption' && rules.pattern.needsReview && rules.pattern.action.needsReview).toBe(true);
     for (const a of indicators.flatMap((i) => [...i.actions.watch, ...i.actions.alert])) {
       expect(a.basis === 'assumption' ? a.needsReview : Boolean(a.sourceId)).toBe(true);
     }
@@ -140,6 +141,73 @@ describe('simulated crew', () => {
   it('clamps the mission day to the record', () => {
     expect(buildTwin(data, 'a', 999).missionDay).toBe(data.lastDay);
     expect(buildTwin(data, 'zzz', data.lastDay).crew.id).toBe('a');
+  });
+});
+
+describe('escalation ladder', () => {
+  const data = createDataset();
+  it('keeps a watch with the astronaut', () => {
+    const b = buildTwin(data, 'b', data.lastDay);
+    expect(b.advice.every((a) => a.escalate === 'self')).toBe(true);
+    expect(topEscalation(b.advice)).toBe('self');
+  });
+  it('moves an alert to the crew, then to the ground when it persists', () => {
+    const rungs = [];
+    for (let day = 143; day <= data.lastDay; day++) rungs.push(topEscalation(buildTwin(data, 'c', day).advice));
+    expect(rungs).toContain('crew');
+    expect(rungs[rungs.length - 1]).toBe('ground');
+    expect(rungs.indexOf('ground')).toBeGreaterThan(rungs.indexOf('crew'));
+    const sleep = buildTwin(data, 'c', data.lastDay).advice.find((a) => a.key === 'indicator:sleepHours')!;
+    expect(sleep.alertDays).toBeGreaterThanOrEqual(rules.escalation.groundAfterAlertDays);
+  });
+  it('covers every indicator named in the challenge brief', () => {
+    const ids = indicators.map((i) => i.id);
+    for (const id of ['restingHr', 'sleepHours', 'mood', 'systolicBp', 'diastolicBp', 'glucose', 'bodyTempC']) expect(ids).toContain(id);
+    for (const crew of data.crew) for (const i of indicators) expect(crew.readings[i.id]).toHaveLength(data.lastDay - data.firstDay + 1);
+  });
+});
+
+describe('pattern model', () => {
+  const data = createDataset();
+  it('inverts a matrix and refuses a singular one', () => {
+    const inv = invert([[4, 7], [2, 6]])!;
+    expect(inv[0][0]).toBeCloseTo(0.6, 9);
+    expect(inv[0][1]).toBeCloseTo(-0.7, 9);
+    expect(inv[1][0]).toBeCloseTo(-0.2, 9);
+    expect(inv[1][1]).toBeCloseTo(0.4, 9);
+    expect(invert([[1, 2], [2, 4]])).toBeNull();
+  });
+  it('flags a crew member whose readings are each inside their own limits', () => {
+    const d = buildTwin(data, 'd', data.lastDay);
+    expect(d.indicators.every((r) => r.status === 'nominal')).toBe(true);
+    expect(d.systems.every((s) => s.status === 'nominal')).toBe(true);
+    expect(d.pattern.status).toBe('watch');
+    expect(overallStatus(d)).toBe('watch');
+    expect(d.advice[0].key).toBe('pattern');
+    expect(d.advice[0].explanation).toContain('No single reading crossed its line');
+  });
+  it('stays quiet for a normal crew member on every day', () => {
+    for (let day = data.firstDay + rules.baselineDays; day <= data.lastDay; day++) {
+      expect(buildTwin(data, 'a', day).pattern.status).toBe('nominal');
+    }
+  });
+  it('waits for the pattern to persist before flagging it', () => {
+    expect(buildTwin(data, 'd', 143).pattern.status).toBe('nominal');
+    expect(buildTwin(data, 'd', 144).pattern.status).toBe('nominal');
+    expect(buildTwin(data, 'd', 145).pattern.status).toBe('watch');
+  });
+  it('never raises an alert, and explains itself', () => {
+    for (const crew of data.crew) {
+      const { pattern } = buildTwin(data, crew.id, data.lastDay);
+      expect(pattern.status).not.toBe('alert');
+      expect(pattern.contributors).toHaveLength(rules.pattern.features.length);
+      expect(pattern.contributors.reduce((sum, c) => sum + c.share, 0)).toBeCloseTo(1, 6);
+      expect(pattern.trainedOn).toBe(rules.baselineDays);
+    }
+  });
+  it('reports no-data when it cannot learn a baseline', () => {
+    const readings = { ...data.crew[0].readings, sleepHours: data.crew[0].readings.sleepHours.map((v, i) => (i < 8 ? null : v)) };
+    expect(patternCheck(readings, data.lastDay - data.firstDay, rules).status).toBe('no-data');
   });
 });
 

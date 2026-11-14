@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { hazardById, overrideKey } from '../domain';
 import type { IndicatorResult } from '../domain';
+import { DeviationBar, Sparkline } from '../components/ui/charts';
 import { AgentTag, BasisTag, Card, SourceLink, StatusBadge, buttonSecondary } from '../components/ui/primitives';
 import { useMission } from './state';
 
@@ -29,11 +30,15 @@ function ReadingsForm() {
     const invalid = text.trim() !== '' && !(Number.isFinite(number) && number >= indicator.input.min && number <= indicator.input.max);
     const typed = overrideKey(crewId, day, indicator.id) in overrides;
     return (
-      <div key={indicator.id} className={`grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-2 rounded-xl border px-3 py-2 sm:grid-cols-[minmax(0,1fr)_170px_110px] ${focused === indicator.id ? 'border-accent' : 'border-line'} bg-panel2`}>
+      <div key={indicator.id} className={`grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-2 rounded-xl border px-3 py-2 sm:grid-cols-[minmax(0,1fr)_170px_110px] lg:grid-cols-[minmax(0,1fr)_minmax(0,150px)_170px_110px] ${focused === indicator.id ? 'glow-accent border-accent' : 'border-line'} bg-bg/50`}>
         <label htmlFor={`reading-${indicator.id}`} className="text-sm font-semibold">
           {indicator.name}
           <span className="block text-xs font-normal text-muted">{typed ? 'Typed in' : 'Simulated telemetry'}</span>
         </label>
+        <div className="hidden flex-col gap-1.5 lg:flex">
+          <Sparkline values={result.history} status={status} baseline={result.baseline} height={26} />
+          <DeviationBar result={result} />
+        </div>
         <div className="flex items-center gap-2">
           <input
             id={`reading-${indicator.id}`} type="number" inputMode="decimal"
@@ -104,11 +109,10 @@ export function LogPage() {
   const { twin, crewId, day } = useMission();
   return (
     <div className="flex min-w-0 flex-col gap-5">
-      <div>
-        <h1 className="text-3xl font-semibold tracking-tight">Log today's readings</h1>
-        <p className="mt-1 text-sm text-muted">
-          {twin.crew.label} · mission day {day} · the simulated telemetry stream has filled these in. Type over any value.
-        </p>
+      <div className="anim-rise">
+        <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-accent">{twin.crew.label} · mission day {day}</p>
+        <h1 className="mt-1 text-4xl font-semibold tracking-tight">Log today's readings</h1>
+        <p className="mt-1 text-sm text-muted">The simulated telemetry stream has filled these in. Type over any value and the twin updates.</p>
       </div>
       {/* Remount when the crew member or day changes, so typed drafts never carry over. */}
       <ReadingsForm key={`${crewId}:${day}`} />
