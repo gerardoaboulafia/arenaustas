@@ -1,0 +1,10 @@
+[
+  { "id": "circadian", "name": "Circadian rhythm", "modelId": "circadian-sleep-debt", "drivers": ["sleepHours"], "hazardIds": ["isolation", "hostile-closed"],
+    "measure": { "name": "Sleep debt", "unit": "h over 7 days", "decimals": 1, "direction": "higher", "watch": 5, "alert": 10, "basis": "assumption", "needsReview": true } },
+  { "id": "cardio", "name": "Cardiovascular", "modelId": "cardio-fitness", "drivers": ["restingHr", "hrvMs", "exerciseMin"], "hazardIds": ["gravity"],
+    "measure": { "name": "Aerobic fitness index", "unit": "% of pre-flight", "decimals": 1, "direction": "lower", "watch": 95, "alert": 90, "basis": "assumption", "needsReview": true } },
+  { "id": "muscle", "name": "Muscle", "modelId": "muscle-strength", "drivers": ["exerciseMin"], "hazardIds": ["gravity"],
+    "measure": { "name": "Muscle strength index", "unit": "% of pre-flight", "decimals": 1, "direction": "lower", "watch": 95, "alert": 90, "basis": "assumption", "needsReview": true } },
+  { "id": "bone", "name": "Bone", "modelId": "bone-density", "drivers": ["exerciseMin"], "hazardIds": ["gravity"],
+    "measure": { "name": "Bone mineral density", "unit": "% of pre-flight", "decimals": 2, "direction": "lower", "watch": 97, "alert": 95, "basis": "assumption", "needsReview": true } }
+]

@@ -1,0 +1,7 @@
+[
+  { "id": "radiation", "name": "Space radiation", "summary": "Radiation in space is invisible and is considered one of the most hazardous aspects of spaceflight.", "sourceIds": ["nasa-hazards", "nasa-radiation"] },
+  { "id": "isolation", "name": "Isolation and confinement", "summary": "Crews live isolated and confined in a small space for months or years, which affects behavior and teamwork.", "sourceIds": ["nasa-hazards"] },
+  { "id": "distance", "name": "Distance from Earth", "summary": "A Mars mission means roughly three years away from Earth, so planning and self-sufficiency are key.", "sourceIds": ["nasa-hazards"] },
+  { "id": "gravity", "name": "Gravity fields", "summary": "Muscles, bones, the inner ear and organs must adjust to each new gravity level the crew encounters.", "sourceIds": ["nasa-hazards", "nasa-bone-muscle"] },
+  { "id": "hostile-closed", "name": "Hostile and closed environments", "summary": "The spacecraft is a closed ecosystem: temperature, pressure, lighting, noise and air quality shape daily life.", "sourceIds": ["nasa-hazards"] }
+]

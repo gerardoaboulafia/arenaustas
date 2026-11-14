@@ -151,3 +151,25 @@ From `PLAN.md` §11:
 | Demo format | Sunday's work |
 | Number of simulated crew members | Seed data (§6) |
 | Look | §7 |
+
+## 11. What the first build changed
+
+Recorded on 2026-11-14 after comparing this design with the `astra` branch and building it.
+
+Taken from the `astra` branch (re-implemented, no code copied):
+
+- **Personal baseline.** An indicator's status compares the mean of the last 3 days with the mean of the astronaut's first 14 days on record, instead of fixed ranges. One odd reading does not change a status. This replaces the `ranges` in `PLAN.md` §6.4 with a `rule` per indicator.
+- **No-data state.** Too few readings gives "No data", not a guess.
+- **Agent trace.** "How this was decided" on the Twin screen lists each agent's input, rule and result.
+- **Mission-day replay.** A day slider and a Replay button in the top bar.
+- **Palette.** Deep navy, blue panels and one cyan accent. Status colors stay reserved for status.
+
+Different from §1 to §8 above:
+
+- Body-system measures live in their own file, `systems.json`, instead of `derived` entries in `indicators.json`.
+- Charts are plain SVG; no chart library.
+- The Log screen has no telemetry switch. Simulated readings are always filled in and can be typed over or reset.
+- Radiation dose is projected but has no status bands: no dose limit has been verified from a source yet.
+- No escalation label is shown on actions. When to involve a crewmate or the ground is still open decision 5.
+
+Still assumptions that need review (the tool tags each one): every indicator threshold, every action text, the status bands of the four body-system measures, the exercise effect in the bone model, and all parameters of the muscle, cardiovascular and circadian models.

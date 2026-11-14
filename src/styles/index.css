@@ -1,0 +1,62 @@
+/* AI-assisted: written with Claude Code, reviewed by the team. */
+@import "tailwindcss";
+
+/* Palette from the team's first prototype: deep navy, calm blue panels, one cyan accent.
+   The three status colors are used for status and nothing else. */
+@theme {
+  --color-bg: #07111f;
+  --color-panel: #0c1a2b;
+  --color-panel2: #102238;
+  --color-line: #21374b;
+  --color-ink: #ebf6fa;
+  --color-muted: #9baec0;
+  --color-accent: #58d8e8;
+  --color-nominal: #80d6b3;
+  --color-watch: #e6ac55;
+  --color-alert: #ff8a73;
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-bg);
+  background-image:
+    linear-gradient(rgba(88, 216, 232, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(88, 216, 232, 0.035) 1px, transparent 1px);
+  background-size: 48px 48px;
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+summary:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+button,
+summary,
+select {
+  cursor: pointer;
+}
+
+input[type="range"] {
+  accent-color: var(--color-accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

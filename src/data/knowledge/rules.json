@@ -1,0 +1,10 @@
+{
+  "baselineDays": 14,
+  "recentDays": 3,
+  "minRecentReadings": 2,
+  "minBaselineReadings": 7,
+  "habitDays": 7,
+  "basis": "assumption",
+  "needsReview": true,
+  "note": "Each astronaut is compared with their own baseline: the mean of the last 3 days against the mean of the first 14 days on record. A single odd reading does not change a status. Pattern taken from the team's first prototype."
+}
