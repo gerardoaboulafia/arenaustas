@@ -1,16 +1,4 @@
-import { Suspense } from "react";
-import { getTelemetry } from "@/lib/repository";
-import Mission from "@/components/mission";
+import MissionApp from "@/components/mission-v2/app";
 export default function Page() {
-  return (
-    <Suspense
-      fallback={
-        <main id="main" className="page">
-          Loading synthetic mission…
-        </main>
-      }
-    >
-      <Mission rows={getTelemetry()} crewId="maya-torres" />
-    </Suspense>
-  );
+  return <MissionApp />;
 }

@@ -1,5 +1,20 @@
 # Implementation decision log
 
+## 180-day revision — November 14, 2026
+
+- Implement the user's new 180-day plan locally; this supersedes the active product's original days-120–149 fixture. Preserve that fixture and its canonical regression tests.
+- Timeline: outbound 36h + orbital 176d + return 60h = 180d. Day 0 launches and D180 00:00 completes. Orbital weeks are relative to orbit entry, with 25 full weeks and one closeout day.
+- Schedule drives synthetic readings. Minute samples aggregate to 15-minute endpoint records; activity rates sum and continuous signals average. Seed streams are stable by metric/crew/time, so adding an indicator does not reshuffle existing values.
+- JSON metric registry and long-format CSV overrides replace fixed UI metric keys. Unknown or invalid input is rejected before replacing the running dataset; missing values stay null. Shared habitat is one signal.
+- Same-origin public data fetch is required for editable runtime sources. No external health/backend call is introduced. The local production server reads only two explicitly allowlisted public files live; a portable hosted static build uses its copied public assets.
+- Reuse installed Recharts for overlaid series, Brush zoom, shared tooltips and explicit visibility controls. The user's request was for Plotly-like interaction; no second chart library or extra dependency is required.
+- Persist browser edits and playback with a dataset fingerprint. Restore playback paused and freeze when hidden. History inspection uses an independent day cursor. Data edits reset incompatible simulation history.
+- Default EVA starts at 15:00 UTC after 14:00 preparation, to fit within the noon-to-noon orbital day. Routine meals can be superseded during the EVA/support block. Other schedule collisions are rejected.
+- Activity-matched synthetic review rules replace the original daily fixed thresholds in the active product. New indicators without rules are explicitly unclassified. Scenario targets are independent assumptions without causal health effects.
+- Original SVG position uses the same elapsed clock and discloses AI assistance. Reduced-motion styling and nonvisual exact-data alternatives remain available.
+
+## Original implementation decisions
+
 | UTC | Decision | Reason | Alternative | Risk |
 |---|---|---|---|---|
 | pre-build | Typescript/Next.js/local synthetic fixtures by default | deliver polished reliable app fast | microservices + live sensors | not clinically representative |

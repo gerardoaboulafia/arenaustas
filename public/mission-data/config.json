@@ -1,0 +1,280 @@
+{
+  "schemaVersion": 1,
+  "revision": "astra-180-v1",
+  "seed": 20261114,
+  "timeline": {
+    "durationDays": 180,
+    "transitHours": 36,
+    "orbitalDays": 176,
+    "intervalMinutes": 15
+  },
+  "crew": [
+    {
+      "id": "maya-torres",
+      "name": "Maya Torres",
+      "role": "Mission Commander",
+      "color": "#59d8e8",
+      "pair": "A",
+      "baselines": {
+        "heart_rate": 67,
+        "hrv": 58
+      }
+    },
+    {
+      "id": "eli-chen",
+      "name": "Eli Chen",
+      "role": "Flight Engineer",
+      "color": "#eab86b",
+      "pair": "A",
+      "baselines": {
+        "heart_rate": 63,
+        "hrv": 64
+      }
+    },
+    {
+      "id": "sofia-okafor",
+      "name": "Sofia Okafor",
+      "role": "Science Officer",
+      "color": "#bc9cff",
+      "pair": "B",
+      "baselines": {
+        "heart_rate": 70,
+        "hrv": 55
+      }
+    },
+    {
+      "id": "noah-patel",
+      "name": "Noah Patel",
+      "role": "Medical Officer",
+      "color": "#8bd49b",
+      "pair": "B",
+      "baselines": {
+        "heart_rate": 65,
+        "hrv": 61
+      }
+    }
+  ],
+  "activities": [
+    {
+      "id": "launch",
+      "label": "Launch",
+      "color": "#ffb36b"
+    },
+    {
+      "id": "transit",
+      "label": "Transit operations",
+      "color": "#d59967"
+    },
+    {
+      "id": "return",
+      "label": "Return operations",
+      "color": "#eda76b"
+    },
+    {
+      "id": "sleep",
+      "label": "Sleep opportunity",
+      "color": "#6679bd"
+    },
+    {
+      "id": "rest",
+      "label": "Rest & personal time",
+      "color": "#73879b"
+    },
+    {
+      "id": "science",
+      "label": "Science",
+      "color": "#48a9c7"
+    },
+    {
+      "id": "maintenance",
+      "label": "Maintenance",
+      "color": "#75a8a1"
+    },
+    {
+      "id": "meals",
+      "label": "Meals & hygiene",
+      "color": "#a3b4a1"
+    },
+    {
+      "id": "exercise",
+      "label": "Exercise",
+      "color": "#60d4a1"
+    },
+    {
+      "id": "eva_prep",
+      "label": "EVA preparation",
+      "color": "#d5b76b"
+    },
+    {
+      "id": "eva",
+      "label": "Spacewalk (EVA)",
+      "color": "#e89b5a"
+    },
+    {
+      "id": "eva_recovery",
+      "label": "EVA recovery",
+      "color": "#b99c72"
+    },
+    {
+      "id": "support",
+      "label": "Onboard EVA support",
+      "color": "#c694c7"
+    }
+  ],
+  "schedule": {
+    "workStartHour": 9,
+    "workEndHour": 18,
+    "sleepStartHour": 22,
+    "sleepHours": 8,
+    "exerciseDays": [
+      0,
+      2,
+      5
+    ],
+    "exerciseStartHour": 13,
+    "exerciseMinutes": 60,
+    "evaDay": 3,
+    "evaStartHour": 15,
+    "evaPrepMinutes": 60,
+    "evaMinutes": 240,
+    "evaRecoveryMinutes": 60,
+    "meals": [
+      {
+        "hour": 8,
+        "minutes": 60
+      },
+      {
+        "hour": 12,
+        "minutes": 60
+      },
+      {
+        "hour": 19,
+        "minutes": 60
+      }
+    ]
+  },
+  "metrics": [
+    {
+      "id": "heart_rate",
+      "label": "Heart rate",
+      "unit": "bpm",
+      "description": "Fictional activity-dependent pulse. Exercise and EVA offsets are demonstration assumptions, not a physiological model.",
+      "scope": "crew",
+      "aggregation": "mean",
+      "decimals": 1,
+      "min": 35,
+      "max": 180,
+      "generator": {
+        "baseline": 66,
+        "noise": 3,
+        "settlingMinutes": 0,
+        "activityOffsets": {
+          "launch": 28,
+          "transit": 8,
+          "return": 12,
+          "sleep": -13,
+          "exercise": 65,
+          "eva_prep": 18,
+          "eva": 38,
+          "eva_recovery": 12,
+          "support": 8,
+          "science": 3,
+          "maintenance": 7
+        }
+      },
+      "review": {
+        "relativeDeviation": 0.18,
+        "minimumSamples": 48,
+        "activities": [
+          "rest"
+        ]
+      }
+    },
+    {
+      "id": "hrv",
+      "label": "Resting HRV",
+      "unit": "ms",
+      "description": "Invented HRV available only during rest or sleep. Blank windows are not measurements of zero.",
+      "scope": "crew",
+      "aggregation": "mean",
+      "decimals": 1,
+      "min": 10,
+      "max": 110,
+      "generator": {
+        "baseline": 60,
+        "noise": 4,
+        "activityOffsets": {
+          "sleep": 9
+        },
+        "activeOnly": [
+          "rest",
+          "sleep"
+        ]
+      },
+      "review": {
+        "relativeDeviation": 0.25,
+        "minimumSamples": 48,
+        "activities": [
+          "rest"
+        ]
+      }
+    },
+    {
+      "id": "sleep_minutes",
+      "label": "Sleep opportunity",
+      "unit": "min",
+      "description": "Minutes scheduled for sleep within this interval; not measured sleep quality.",
+      "scope": "crew",
+      "aggregation": "sum",
+      "decimals": 0,
+      "min": 0,
+      "max": 15,
+      "generator": {
+        "baseline": 0,
+        "noise": 0,
+        "activityOffsets": {
+          "sleep": 1
+        }
+      }
+    },
+    {
+      "id": "exercise_minutes",
+      "label": "Exercise time",
+      "unit": "min",
+      "description": "Scheduled exercise minutes in the interval. EVA is recorded separately.",
+      "scope": "crew",
+      "aggregation": "sum",
+      "decimals": 0,
+      "min": 0,
+      "max": 15,
+      "generator": {
+        "baseline": 0,
+        "noise": 0,
+        "activityOffsets": {
+          "exercise": 1
+        }
+      }
+    },
+    {
+      "id": "cabin_co2",
+      "label": "Cabin CO₂",
+      "unit": "ppm",
+      "description": "One shared invented habitat signal, shown once for the spacecraft. No toxicity or safety assessment.",
+      "scope": "habitat",
+      "aggregation": "mean",
+      "decimals": 0,
+      "min": 300,
+      "max": 2500,
+      "generator": {
+        "baseline": 850,
+        "noise": 30,
+        "trendPerDay": 0.2,
+        "activityOffsets": {}
+      },
+      "review": {
+        "relativeDeviation": 0.4,
+        "minimumSamples": 96
+      }
+    }
+  ]
+}

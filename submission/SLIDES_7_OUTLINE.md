@@ -45,15 +45,15 @@ Exactly seven slides including the cover. This is the requested content outline,
 
 **Footer:** Typed local computations. No required LLM or API key.
 
-## Slide 4 - Follow Maya's synthetic trend
+## Slide 4 - Follow a 180-day mission
 
 **On-slide copy**
 
-> Mission day 149: inspect Maya's sleep and HRV changes.  
-> Compare recent readings with her own baseline.  
-> Review the rule and data quality behind the finding.
+> Start at day 0 and compare four fictional crew members.\
+> Inspect 15-minute signals alongside exercise and alternating-pair EVA.\
+> Review any completed day while the mission continues.
 
-**Visual:** Capture the working Maya detail view with the expanded finding; preserve the units, mission day and provenance label.
+**Visual:** Capture the working crew chart and activity tracks on day 1, including 13:00 exercise; preserve units, day and synthetic label.
 
 **Speaker note:** Only show the actual values returned by the release. Do not invent an accuracy percentage or a measured astronaut outcome.
 
@@ -63,11 +63,11 @@ Exactly seven slides including the cover. This is the requested content outline,
 
 **On-slide copy**
 
-> Compare a target sleep schedule and additional exercise minutes.  
-> +15 planned minutes/day = +450 planned minutes in 30 days.  
-> An assumed schedule does not establish a health benefit.
+> Compare a target with the recent completed-day baseline.\
+> Edit source data or add an indicator without rewriting the interface.\
+> An assumed signal or schedule does not establish a health benefit.
 
-**Visual:** Actual scenario screen, with target sleep 8 hours and additional exercise 15 minutes; show the corresponding baseline comparison and disclaimer.
+**Visual:** Actual scenario screen after at least three completed days, with a selected indicator and changed target; show its computed baseline and disclaimer.
 
 **Speaker note:** These controls do not predict physiological recovery, bone density, radiation effects or personalized treatment efficacy.
 

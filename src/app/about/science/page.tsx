@@ -23,20 +23,26 @@ export default function Science() {
           <span className="eyebrow">01 / OBSERVATIONS</span>
           <h2>A fictional mission.</h2>
           <p>
-            Four fictional crew members. Thirty daily records each. Mission days
-            120–149. The included CSV contains 120 synthetic observations
-            generated with AI assistance using a fixed seed (20261114).
+            Four fictional crew members follow an editable 180-day mission: 36
+            hours outbound, 176 days in orbit, and 60 hours returning. The
+            default seed (20261114) generates 69,120 crew intervals, one every
+            15 minutes. Day 0 begins at launch; day 180 at 00:00 ends the
+            mission.
           </p>
           <p>
-            Sleep (h), HRV (ms), resting heart rate (beats/min), exercise
-            (min/day), and cabin CO₂ (ppm) are invented demo signals. The
-            radiation proxy is a fictional unitless context value and is
-            excluded from findings. It is not dosimetry.
+            Heart rate (bpm), resting HRV (ms), scheduled sleep and exercise
+            minutes, and shared cabin CO₂ (ppm) are invented signals. A metric
+            registry defines units, bounds, aggregation and optional review
+            rules. User-defined indicators use the same pipeline. The original
+            30-day CSV is preserved as a legacy regression fixture, separate
+            from the active mission.
           </p>
           <p>
             No real astronaut measurements, accounts, analytics, or external
             health services are used. Mission calculations run locally from the
-            bundled fixture.
+            editable local configuration and optional CSV corrections. Browser
+            customizations are stored on this device; no personal data is sent
+            to an external service.
           </p>
         </section>
         <section className="panel">
@@ -67,45 +73,51 @@ export default function Science() {
         </section>
         <section className="panel full-width">
           <span className="eyebrow">03 / REPRODUCIBLE METHOD</span>
-          <h2>From a daily observation to a reviewable finding.</h2>
+          <h2>From scheduled activity to a reviewable signal.</h2>
           <ol className="method-list">
             <li>
-              <strong>Build the personal baseline.</strong> Mean of valid
-              readings within mission days 120–133, using only observations
-              available on the selected day. Require at least 10 readings per
-              metric.
+              <strong>Build the schedule first.</strong> Three exercise days per
+              full orbital week. One weekly EVA by alternating pairs: Maya and
+              Eli in odd weeks, Sofia and Noah in even weeks. The other pair
+              supports onboard. The final partial week closes operations.
             </li>
             <li>
-              <strong>Compare recent observations.</strong> Calculate a mean
-              over the last three calendar days; require at least two valid
-              readings. Missing values remain unknown.
+              <strong>Aggregate minute samples.</strong> A timestamp of 13:15
+              summarizes [13:00, 13:15). Continuous signals are means; scheduled
+              activity minutes are totals. Activity offsets, noise, trends and
+              individual baselines are editable synthetic assumptions. HRV is
+              unavailable outside its configured rest/sleep activities. A window
+              with an ineligible minute remains missing.
             </li>
             <li>
-              <strong>Apply fixture-only rules.</strong> Sleep ≤ baseline − 1 h;
-              HRV ≤ 0.80 × baseline; resting HR ≥ 1.12 × baseline; exercise ≤
-              0.65 × baseline. Cabin CO₂ ≥ 1.40 × baseline produces habitat
-              context only.
+              <strong>Compare matching activity.</strong> Use the first 14
+              orbital days as the baseline, capped at the inspection time.
+              Compare the last three days against baseline means weighted to the
+              same activity mix. Mixed-activity windows are excluded from
+              review. Per-metric minimum sample counts apply to both windows.
             </li>
             <li>
-              <strong>Check persistence.</strong> A crossed rolling rule is
-              persistent when at least two individual readings in the three-day
-              window also cross the threshold. Two or more distinct persistent
-              health signals suggest review; one suggests observation.
-              Insufficient data prevents a reassuring overall status.
+              <strong>Apply explicit demo rules.</strong> A configured absolute
+              relative deviation can suggest review. Missing latest eligible
+              observations or stale endpoints prevent reassurance. Metrics
+              without a rule remain unclassified. Shared cabin readings are
+              assessed once as habitat context. These are not clinical
+              thresholds.
             </li>
             <li>
-              <strong>Compare plans.</strong> Hold the recent seven-day
-              synthetic mean constant, requiring three readings per metric.
-              Compare 30 days with a chosen sleep opportunity (5–9 h) and
-              additional exercise (0–30 min/day, total capped at 180). Planned
-              sleep difference = 30 × (target − recent mean). Exercise
-              difference = 30 × actual capped daily addition.
+              <strong>Compare assumptions.</strong> The scenario page uses the
+              last seven completed days, requiring three usable days. It holds a
+              recent daily mean or total constant for 30 days alongside an
+              explicit target. Summed indicators require complete daily
+              coverage; mean indicators require four valid intervals. No other
+              indicator changes as a consequence of the target.
             </li>
             <li>
               <strong>Explain the result.</strong> Deterministic templates
-              expose values, windows, quality, exact rules and allowed evidence
-              IDs. Four agent traces are inspectable in the product. No
-              generative model makes health decisions.
+              expose values, windows, quality and exact rules. Four agent traces
+              are inspectable in the product. NASA links provide research
+              context separately from the fictional measurements. No generative
+              model makes health decisions.
             </li>
           </ol>
         </section>

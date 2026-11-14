@@ -1,5 +1,21 @@
 # Build log
 
+## 2026-11-14 — editable 180-day mission
+
+Implemented locally on branch `astra` at the user's request. At implementation handoff, no new commit or push had been performed. The user subsequently authorized committing and pushing this revision to the existing `astra` branch only; `main` is excluded from the push. No hosted deployment or official submission is part of this delivery.
+
+| Milestone | Status | Files / behavior | Evidence |
+|---|---|---|---|
+| Schedule | Complete | `src/lib/mission/schedule.ts`, editable public config; exact 36h / 176d / 60h phases, three exercise days, 25 alternating-pair EVAs and closeout | Domain tests cover boundaries, rotation, duration and gap-free activities |
+| Data pipeline | Complete | Generic metric registry, seeded minute synthesis, 15-minute means/totals, shared habitat, strict JSON/CSV validation and overrides | 69,120 records; CSV full-fixture round-trip; added metric and profile/seed changes tested |
+| Runtime | Complete | Provider, local sources, persisted clock keyed to input fingerprint, history cursor, speed/pause/reset/completion | Eight runtime/scenario tests; no future data; reload restores paused |
+| Product | Complete automated gate | Central crew comparison, filters/zoom/table, activity tracks, full schedule, SVG position, editable data route, generic scenarios, updated landing/science | Thirteen dashboard tests plus legacy regression suite |
+| QA / local release | Automated checks complete | Typecheck, lint, 143 tests, production build, 9-route HTTP smoke with public data endpoints | Browser host still unavailable; visual desktop/mobile inspection not claimed |
+
+Sources: `public/mission-data/config.json`, `public/mission-data/overrides.csv`. Local production server reads these allowlisted files directly, so reload applies edits without rebuilding. Original fixture and supplied PDF are preserved. Usage and data semantics are documented in `EDITABLE_MISSION.md`; current results in `TEST_REPORT.md`.
+
+## Original implementation history
+
 Implementation began 2026-11-13 America/Buenos_Aires after the user explicitly repeated the instruction to build immediately. See `IMPLEMENTATION_STATUS.md`; competition timing compliance requires organizer review.
 
 | UTC | Milestone | Status | Implemented | Test result | Remaining |

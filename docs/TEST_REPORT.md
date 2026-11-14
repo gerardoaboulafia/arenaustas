@@ -1,5 +1,27 @@
 # ASTRA test report
 
+## Current local revision — November 14, 2026
+
+The active product now implements the editable 180-day mission. The older report below is historical evidence for the original daily fixture; its 48-test count and release ZIP do not describe the current build.
+
+| Check | Executed result |
+|---|---|
+| `npm run typecheck` | PASS |
+| `npm run lint` | PASS; an intermediate unused test variable was removed |
+| `npm test` | PASS: 143 tests across 5 files, final full run 20.15 seconds |
+| `npm run build` | PASS: production static export including `/mission/data` |
+| `npm run test:e2e` | PASS: 9 product routes, 2 expected 404s, 16 JS/CSS assets, source isolation, runtime config/CSV endpoints and no-store caching |
+| Local preview | Production server running at `http://127.0.0.1:3000`; updated interface and public data available |
+| Browser visual inspection | NOT RUN: `cua.getState()` again returned “The browser access host is unavailable”. No alternative browser-control bypass or screenshot claim |
+
+Coverage: 40 original domain tests and 8 original component regressions; 74 new mission domain cases; 8 runtime/scenario tests; 13 dashboard/schedule/position interaction cases. The new tests verify exact phase boundaries, 25 alternating EVAs, weekly exercise, collision rejection, 69,120 samples, interval-end semantics, seeds, generic new indicators, shared habitat, strict CSV overrides including a 293,760-value full export, missingness, activity-matched findings, audit stages, no future leakage, independent history/playback, persistence, atomic validation, input reload, crew filters and zoom/table alignment.
+
+jsdom chart tests preserve the real chart data contracts and test accessible controls while mocking SVG layout primitives. They do not establish actual Recharts browser geometry, mobile layout or browser hydration. HTTP smoke verifies delivery, not a browser interaction journey.
+
+No dependency was added for this revision. Checks were completed at the local implementation handoff. The user subsequently authorized a GitHub delivery to `astra` only; no hosted deployment or official submission is included. Source data and instructions: `EDITABLE_MISSION.md`.
+
+## Original release evidence (historical)
+
 Release: `astra-mission` 1.0.0. Executed November 13, 2026 America/Buenos_Aires (November 14 UTC), Windows PowerShell, Node 24.11.1, npm 11.6.2. Git initialized locally; no commit or remote publication claimed.
 
 ## Executed checks

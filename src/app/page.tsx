@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { getTelemetry } from "@/lib/repository";
-import { calculateBaselines } from "@/lib/agents/monitoring";
+import defaultConfig from "../../public/mission-data/config.json";
+import { generateTelemetry, validateConfig } from "@/lib/mission";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -25,7 +25,7 @@ function Planet() {
         <span className="planet-dot" />
       </div>
       <div className="orbital-label">
-        <span className="live-dot" /> EXPLORATION MISSION / 0149
+        <span className="live-dot" /> EXPLORATION MISSION / 180 DAYS
       </div>
       <div className="signal-overlay">
         <span className="eyebrow">SIGNAL ACQUIRED</span>
@@ -47,19 +47,19 @@ const steps = [
     icon: ScanLine,
     name: "Monitor",
     verb: "Read the signal.",
-    text: "Quality-check daily observations against each crew member’s own baseline.",
+    text: "Read 15-minute synthetic observations with their activity context and personal baseline.",
   },
   {
     icon: ShieldCheck,
     name: "Assess",
     verb: "Notice the change.",
-    text: "Identify persistent deviations and show exactly which rules they cross.",
+    text: "Compare activity-matched signals and expose the configured demo rules.",
   },
   {
     icon: SlidersHorizontal,
     name: "Explore",
     verb: "Consider what if.",
-    text: "Compare 30-day sleep and activity plans with transparent assumptions.",
+    text: "Compare 30-day assumptions using the active mission’s editable indicators.",
   },
   {
     icon: FileSearch,
@@ -69,9 +69,32 @@ const steps = [
   },
 ];
 export default function Home() {
-  const rows = getTelemetry().filter(row => row.crewId === 'maya-torres');
-  const baseline = calculateBaselines(rows, 'maya-torres').sleepHours;
-  const path = rows.map((row, index) => `${index === 0 ? 'M' : 'L'}${(index / 29 * 650).toFixed(1)} ${((8.2 - (row.sleepHours ?? 8.2)) / 3 * 170).toFixed(1)}`).join(' ');
+  const config = validateConfig(defaultConfig).value!;
+  const previewMetric =
+    config.metrics.find(
+      (metric) => metric.scope === "crew" && metric.aggregation === "mean",
+    ) ?? config.metrics[0];
+  const previewCrew = config.crew[0];
+  const rows = generateTelemetry(config).filter(
+    (row) =>
+      row.crewId === config.crew[0].id &&
+      row.endMinute > 1440 &&
+      row.endMinute <= 2880,
+  );
+  const baseline =
+    previewCrew.baselines[previewMetric.id] ?? previewMetric.generator.baseline;
+  const values = rows
+    .map((row) => row.values[previewMetric.id])
+    .filter((value): value is number => typeof value === "number");
+  const minimum = values.length ? Math.min(...values) - 5 : 0;
+  const maximum = values.length ? Math.max(...values) + 5 : 1;
+  const path = rows
+    .map((row, index) =>
+      row.values[previewMetric.id] === null
+        ? ""
+        : `${index === 0 || rows[index - 1].values[previewMetric.id] === null ? "M" : "L"}${((index / Math.max(1, rows.length - 1)) * 650).toFixed(1)} ${(((maximum - row.values[previewMetric.id]!) / (maximum - minimum)) * 170).toFixed(1)}`,
+    )
+    .join(" ");
   return (
     <main id="main">
       <section className="hero wrap">
@@ -108,11 +131,11 @@ export default function Home() {
       </section>
       <div className="mission-strip wrap">
         <div>
-          <strong>04</strong>
+          <strong>{String(config.crew.length).padStart(2, "0")}</strong>
           <span>Fictional crew members</span>
         </div>
         <div>
-          <strong>30</strong>
+          <strong>{config.timeline.durationDays}</strong>
           <span>Days of synthetic telemetry</span>
         </div>
         <div>
@@ -189,24 +212,30 @@ export default function Home() {
             <span className="eyebrow">03 / INSIDE THE MISSION</span>
             <h2>A signal worth a closer look.</h2>
           </div>
-          <Link className="text-link" href="/mission/crew/maya-torres?day=149">
-            Open Maya’s profile <ArrowUpRight size={17} />
+          <Link
+            className="text-link"
+            href={`/mission?crew=${encodeURIComponent(previewCrew.id)}`}
+          >
+            Open {previewCrew.name}’s profile <ArrowUpRight size={17} />
           </Link>
         </div>
         <div className="demo-preview">
           <div className="preview-chart">
             <div className="section-heading">
               <span>
-                <Activity size={16} /> MAYA TORRES / SLEEP
+                <Activity size={16} /> {previewCrew.name.toUpperCase()} /{" "}
+                {previewMetric.label.toUpperCase()}
               </span>
-              <span className="tag amber">REVIEW SUGGESTED</span>
+              <span className="tag">ACTIVITY IN CONTEXT</span>
             </div>
             <div className="mini-chart">
-              <div className="chart-guide">{baseline?.toFixed(2)} h baseline</div>
+              <div className="chart-guide">
+                {baseline} {previewMetric.unit} configured baseline
+              </div>
               <svg
                 viewBox="0 0 650 170"
                 role="img"
-                aria-label="Maya's 30 synthetic daily sleep readings, days 120 to 149, plotted from the included fixture. Open mission for exact values."
+                aria-label={`Bundled example: ${previewCrew.name}'s fictional ${previewMetric.label} during mission day 1. Open mission for current configuration and exact values.`}
               >
                 <defs>
                   <linearGradient id="previewFade" x1="0" y1="0" x2="0" y2="1">
@@ -218,28 +247,27 @@ export default function Home() {
                   d={`${path} L650 170 L0 170 Z`}
                   fill="url(#previewFade)"
                 />
-                <path
-                  d={path}
-                  fill="none"
-                  stroke="#58d8e8"
-                  strokeWidth="3"
-                />
+                <path d={path} fill="none" stroke="#58d8e8" strokeWidth="3" />
               </svg>
               <div className="axis-labels">
-                <span>DAY 120</span>
-                <span>DAY 133</span>
-                <span>DAY 149</span>
+                <span>DAY 1 / 00:15</span>
+                <span>12:00 / ORBIT ENTRY</span>
+                <span>24:00</span>
               </div>
             </div>
-            <small>Synthetic data · Illustrative preview · Sleep (hours)</small>
+            <small>
+              Synthetic data · Bundled example · {previewMetric.label} (
+              {previewMetric.unit})
+            </small>
           </div>
           <div className="preview-story">
             <span className="eyebrow">THE OBSERVATION</span>
-            <h3>A change from her usual.</h3>
+            <h3>The activity explains the change.</h3>
             <p>
-              Maya’s late-mission sleep and HRV trends cross her personal demo
-              rules. Open the finding to see the numbers, data quality, and
-              reasoning.
+              Sleep, rest, exercise and spacewalks shape the fictional signals.
+              Start the mission, follow all four crew members, and inspect any
+              completed day. Modify the source data to explore your own
+              assumptions.
             </p>
             <Link href="/mission" className="text-link">
               Investigate the signal <ArrowRight size={16} />
@@ -275,8 +303,14 @@ export default function Home() {
             <div>
               <h3>Clearly synthetic observations</h3>
               <p>
-                120 invented daily records power the demonstration. No real
-                astronaut health data.
+                {(
+                  config.timeline.durationDays *
+                  96 *
+                  config.crew.length
+                ).toLocaleString("en-US")}{" "}
+                crew intervals cover the bundled {config.timeline.durationDays}
+                -day mission. Editable configuration and CSV corrections. No
+                real astronaut health data.
               </p>
             </div>
           </div>

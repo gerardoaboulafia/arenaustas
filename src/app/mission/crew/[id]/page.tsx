@@ -1,8 +1,6 @@
-import { Suspense } from "react";
 import { notFound } from "next/navigation";
-import { getTelemetry } from "@/lib/repository";
 import { CREW_IDS, type CrewId } from "@/lib/types";
-import Mission from "@/components/mission";
+import MissionApp from "@/components/mission-v2/app";
 export function generateStaticParams() {
   return CREW_IDS.map((id) => ({ id }));
 }
@@ -14,15 +12,5 @@ export default async function Page({
 }) {
   const { id } = await params;
   if (!CREW_IDS.includes(id as CrewId)) notFound();
-  return (
-    <Suspense
-      fallback={
-        <main id="main" className="page">
-          Loading crew profile…
-        </main>
-      }
-    >
-      <Mission rows={getTelemetry()} crewId={id as CrewId} detail />
-    </Suspense>
-  );
+  return <MissionApp crewId={id} />;
 }

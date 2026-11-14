@@ -8,7 +8,7 @@ ASTRA - Astronaut System for Tracking Risk & Assessment
 
 ## High-level project summary
 
-ASTRA is an independent astronaut health-awareness prototype that makes monitoring signals explainable. Four deterministic software agents turn a fictional crew's daily telemetry into baseline comparisons, review-oriented findings, transparent 30-day planning scenarios and source-linked explanations. Users can replay a synthetic mission, inspect why a trend was flagged and compare assumed sleep and exercise schedules. NASA human-spaceflight research provides context for the evidence cards; the readings and thresholds are demonstration-only. ASTRA explores how crews could review information with greater autonomy while keeping uncertainty, provenance and human judgment visible. It does not diagnose conditions or predict medical outcomes.
+ASTRA is an independent astronaut health-awareness prototype that makes monitoring signals explainable. Four deterministic software agents process editable, fictional telemetry throughout a 180-day mission. Users start the mission, compare four crew members at 15-minute intervals, inspect activity-matched findings and explore transparent 30-day assumptions. The schedule includes exercise and weekly spacewalks by alternating pairs. A data editor supports new indicators and CSV corrections without rewriting the interface. NASA human-spaceflight research provides separately labeled context; readings and thresholds are demonstration-only. ASTRA keeps uncertainty, provenance and human judgment visible. It does not diagnose conditions or predict medical outcomes.
 
 ## Selected challenge
 
@@ -34,17 +34,17 @@ Local development and a successful production build do not establish a public UR
 
 ### What it does
 
-ASTRA opens with a mission-focused landing page and a clearly labeled synthetic demonstration. The mission dashboard follows four fictional crew members over mission days 120-149. Users select a crew member and replay the timeline to inspect sleep, heart-rate variability, resting heart rate, exercise and habitat context.
+ASTRA opens with a mission-focused landing page and a clearly labeled synthetic demonstration. The mission runs from day 0 to day 180: 36 hours outbound, 176 orbital days, then 60 hours returning. Users compare four fictional crew members, start or pause accelerated playback, and browse any completed day while the mission clock continues. The schedule drives exercise, alternating-pair EVA, support, sleep and routine activities; a clock-driven spacecraft schematic shows the current phase.
 
-The four agents have distinct responsibilities. Monitoring validates observations and compares recent values with an individual baseline. Risk Assessment applies fixture-specific rules and produces workflow states such as review suggested or insufficient data. Simulation compares explicit sleep and exercise schedule assumptions over 30 days. Explanation connects a finding to its contributing readings, rule, quality information and research-context source.
+The four agents have distinct responsibilities. Monitoring compares observations against activity-matched personal baselines. Risk Assessment applies explicit per-indicator demo rules and produces review suggestions or insufficient-data states. Simulation builds independent constant-value assumptions over 30 days. Explanation exposes contributing values, rules and quality information. NASA evidence remains separately labeled research context.
 
 A demonstration centers on Maya Torres: select the final mission day, inspect her sleep and HRV deviations, review the explanation, then explore a different hypothetical schedule. The user can see the difference between a calculated observation, a planning assumption and a supporting research reference.
 
 ### How it works
 
-The locally bundled fixture contains 120 rows: 30 days for each of four invented crew members. Pure TypeScript modules perform reproducible calculations without a required LLM, NASA API request, account or external database. Baselines and thresholds belong to the prototype; NASA research does not calibrate them.
+The default configuration generates 69,120 crew records: 180 days at 15-minute intervals for four invented crew members. Minute-level signals aggregate into interval averages or totals. JSON defines profiles, schedule, indicators and generation assumptions; CSV can override individual readings. New indicators automatically appear in the interface. Pure TypeScript modules require no LLM, NASA API, account or external database. The original 120-row daily fixture remains a separate regression asset.
 
-The 30-day scenario compares planned sleep opportunities and exercise minutes with a recent synthetic baseline. For example, adding 15 exercise minutes per day represents 450 extra planned minutes over 30 days. It does not predict improved fitness, bone density or any medical benefit. Missing or insufficient observations must remain visible in the quality assessment.
+The 30-day scenario page compares an explicit indicator target with the recent completed-day baseline. Summed indicators report planned totals; continuous indicators report assumed daily means. Changing a target never changes another indicator's physiology. These are not predictions of improved fitness, bone density or medical benefit. Missing or insufficient observations remain visible.
 
 ### Benefits and next steps
 

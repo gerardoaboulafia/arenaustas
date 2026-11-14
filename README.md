@@ -21,15 +21,20 @@ npm start
 
 `npm start` serves the static `out/` release on loopback port 3000. Stop it with Ctrl+C before starting the development server. To use a different production port: `$env:PORT=3001; npm start`.
 
-## Working features
+## Working features — 180-day mission
 
-- Landing page, four crew profiles, mission dashboard, science/source catalog and 30-day scenario explorer.
-- Synthetic timeline replay, five selectable telemetry charts, personal baselines, exact-reading tables, and expandable findings.
-- Four typed deterministic agents, inspectable audit traces, session-only acknowledgements and human-review demo actions.
-- Live scenario sliders, reset, source-linked explanations, quality/missingness handling and graceful invalid routes.
+- Launch at day 0, orbit entry after 36 hours, 176 orbital days, and a 60-hour return ending exactly at day 180.
+- Editable schedule: three exercise days per week, weekly EVA by alternating pairs, onboard support, sleep, meals, science, maintenance and rest.
+- Deterministic 15-minute telemetry: 69,120 default crew records, activity context, individual profiles and shared habitat signals.
+- Central overlaid crew chart with show/hide/isolate, accessible zoom controls, exact-value tables, historical-day browsing and a clock-driven spacecraft schematic.
+- Start, pause, resume, acceleration, day advance and reset; browser persistence restores a paused session. Browsing history does not move the mission clock.
+- Data/configuration editor, JSON and CSV import/export, extensible indicator registry, validation and automatic regeneration. Four typed agents with auditable, activity-matched comparisons.
+- Generic 30-day assumption scenarios based only on completed historical days. Missing values stay unknown.
 - English submission copy, seven-slide outline, 28-second video script, source/AI disclosure and release checklist in `submission/`.
 
-Try Maya at day 149 for sleep/HRV/resting-heart-rate deviations, Eli at day 149 for the stable comparison, Sofia at day 140 for habitat context, and Noah at day 149 for the activity trend. Scenario defaults (8 h / +15 min) are hypothetical interface values, not recommendations.
+Open `/mission`, inspect **Mission schedule**, then **Start mission**. Choose **1 day / second** for a fast run, or **15 min / second** to see activity transitions. On mission day 1, the first exercise starts at 13:00; the 13:15 reading summarizes that exercise interval. Review day 1 after it has elapsed while the clock continues.
+
+Open `/mission/data` to edit the schedule and profiles, add indicators or import corrected readings. The source files are `public/mission-data/config.json` and `public/mission-data/overrides.csv`. Both development and local production servers read these public files at runtime; **Reload source files** applies saved file changes without rebuilding. Browser customizations take precedence until reloaded and can be exported. See [editable data guide](docs/EDITABLE_MISSION.md).
 
 ## Verify and deploy
 
@@ -49,7 +54,7 @@ No public deployment or official submission has occurred. Team details, public U
 
 ## Source structure
 
-`src/app/` defines routes, `src/components/` the interactive interface, and `src/lib/` the pure data/agent pipeline. `src/lib/repository.ts` reads the original CSV only at build/server time. Client calculations receive serialized fixture data and the curated NASA catalog. Charts and scenario changes make no external API calls. Review actions are resettable in-session state and disappear on refresh.
+`src/app/` defines routes; `src/components/mission-v2/` is the active mission interface; `src/lib/mission/` owns schedule, validation, synthesis, clock, and four deterministic agent modules. `src/lib/mission-plan.ts` handles the scenario page. Only same-origin public data files are fetched; no external telemetry API is required. The old `src/lib/agents/` pipeline and original daily CSV remain as canonical regression fixtures, separate from the active 180-day product. Default four crew detail routes remain available; configurable crew also use `/mission?crew=ID`.
 
 ## Original planning handoff
 

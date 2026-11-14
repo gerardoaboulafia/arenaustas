@@ -4,18 +4,18 @@ English narration; final exported duration must be **30.0 seconds or less**, inc
 
 ## Narration
 
-> Long missions need understandable health signals. ASTRA shows a synthetic crew through four deterministic agents. Review Maya's trend, inspect the evidence, then compare thirty-day sleep and exercise assumptions. NASA research provides context; the readings are fictional. ASTRA supports transparent review, not diagnosis or medical prediction.
+> Follow a fictional crew across a hundred and eighty days. ASTRA connects the mission schedule to fifteen-minute signals. Compare astronauts, inspect activities, and edit the data or add an indicator. Four deterministic agents expose their assumptions. NASA research provides context; readings are synthetic. This is transparent review, not medical prediction.
 
 ## Shot plan
 
 | Time | Actual app capture | Narration segment / on-screen credit |
 | --- | --- | --- |
-| 00:00-00:03 | Landing hero | "Long missions need understandable health signals." Show ASTRA and [[TEAM_NAME]]; credit actual member names. |
-| 00:03-00:08 | Launch Mission, crew selection and timeline | "ASTRA shows a synthetic crew through four deterministic agents." Add the selected challenge title as a readable subtitle. |
-| 00:08-00:13 | Maya, day 149, expanded explanation | "Review Maya's trend, inspect the evidence," |
-| 00:13-00:19 | Scenario controls visibly update the plan | "then compare thirty-day sleep and exercise assumptions." Keep planning-only label visible. |
-| 00:19-00:24 | NASA evidence cards and actual source links | "NASA research provides context; the readings are fictional." Show NASA Human System Risks as a readable reference. |
-| 00:24-00:28 | Closing frame with real app URL | "ASTRA supports transparent review, not diagnosis or medical prediction." Show [[PUBLIC_APP_URL]]. |
+| 00:00-00:05 | Landing, Start mission and accelerated clock | "Follow a fictional crew across a hundred and eighty days." Show ASTRA and [[TEAM_NAME]]. |
+| 00:05-00:10 | Mission schedule and day-1 exercise readings | "ASTRA connects the mission schedule to fifteen-minute signals." Keep synthetic labels visible. |
+| 00:10-00:16 | Crew visibility controls, activity tracks, add-indicator editor | "Compare astronauts, inspect activities, and edit the data or add an indicator." |
+| 00:16-00:20 | Expanded runtime audit | "Four deterministic agents expose their assumptions." |
+| 00:20-00:25 | NASA evidence cards and source links | "NASA research provides context; readings are synthetic." |
+| 00:25-00:28 | Closing frame with real app URL | "This is transparent review, not medical prediction." Show [[PUBLIC_APP_URL]]. |
 
 ## Capture and export checklist
 

@@ -3,11 +3,13 @@ import { readFile, stat } from "node:fs/promises";
 import { resolve, extname, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 const root = resolve(fileURLToPath(new URL("../out", import.meta.url)));
+const missionDataRoot = resolve(fileURLToPath(new URL("../public/mission-data", import.meta.url)));
 const types = {
   ".html": "text/html; charset=utf-8",
   ".js": "text/javascript; charset=utf-8",
   ".css": "text/css; charset=utf-8",
   ".json": "application/json",
+  ".csv": "text/csv; charset=utf-8",
   ".txt": "text/plain; charset=utf-8",
   ".svg": "image/svg+xml",
   ".woff2": "font/woff2",
@@ -24,6 +26,15 @@ export function startServer(port = Number(process.env.PORT ?? 3000)) {
       }
       const url = new URL(req.url, "http://localhost");
       const path = decodeURIComponent(url.pathname);
+      // Only these two public inputs are live from the project; all application
+      // assets remain the production build. Edits need no rebuild locally.
+      const liveFile = path === "/mission-data/config.json" ? "config.json" : path === "/mission-data/overrides.csv" ? "overrides.csv" : null;
+      if (liveFile) {
+        const data = await readFile(resolve(missionDataRoot, liveFile));
+        res.writeHead(200, { "Content-Type": types[extname(liveFile)], "Cache-Control": "no-store", "X-Content-Type-Options": "nosniff" });
+        res.end(req.method === "HEAD" ? undefined : data);
+        return;
+      }
       let target = resolve(root, "." + path);
       if (target !== root && !target.startsWith(root + sep)) {
         res.writeHead(403);

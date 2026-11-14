@@ -1,5 +1,13 @@
 # ASTRA final source and asset register
 
+## November 14 update — active 180-day mission
+
+The current product reads `public/mission-data/config.json` and `public/mission-data/overrides.csv`, producing 69,120 default crew intervals. These are editable fictional inputs generated with AI-assisted code, not NASA observations. The original daily CSV/profile package is preserved as a legacy regression asset. The central dashboard, schedule, data editor, generic scenarios and original clock-driven SVG position were implemented with OpenAI Codex assistance. No new third-party dependencies or external data services were added.
+
+Current automated evidence is 143 passing tests plus typecheck, lint, production build and nine-route HTTP smoke; see the current section of `docs/TEST_REPORT.md`. Browser visual inspection remains unavailable. The older implementation snapshot below records the first release only. No new publication or official submission occurred.
+
+## Original source audit and implementation snapshot
+
 Research snapshot: **2026-11-14 UTC / 2026-11-13 Buenos Aires**. Exact source retrieval time: **2026-11-14T01:22:21Z**. This register attributes the completed local implementation and submission package. Final automated results: 48 passing tests, typecheck, lint, production build and HTTP smoke. See [TEST_REPORT.md](../docs/TEST_REPORT.md) for actual evidence and browser limits. Human eligibility review and public release remain separate.
 
 ## NASA research records

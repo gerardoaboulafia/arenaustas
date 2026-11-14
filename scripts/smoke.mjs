@@ -15,6 +15,7 @@ try {
     "/mission/crew/sofia-okafor/",
     "/mission/crew/noah-patel/",
     "/mission/scenarios/",
+    "/mission/data/",
     "/about/science/",
   ];
   const assets = new Set();
@@ -42,8 +43,17 @@ try {
   for (const asset of assets)
     assert.equal((await fetch(base + asset)).status, 200, asset);
   assert.equal((await fetch(base + "/package.json")).status, 404);
+  const configResponse = await fetch(base + "/mission-data/config.json");
+  assert.equal(configResponse.status, 200);
+  assert.equal(configResponse.headers.get("cache-control"), "no-store");
+  const config = await configResponse.json();
+  assert.equal(config.timeline.durationDays, 180);
+  assert.equal(config.timeline.intervalMinutes, 15);
+  assert.equal(config.crew.length, 4);
+  assert.match(await (await fetch(base + "/mission-data/overrides.csv")).text(), /^end_minute,crew_id,metric_id,value/);
+  assert.equal((await fetch(base + "/mission-data/private.txt")).status, 404);
   console.log(
-    `PASS ${assets.size} JS/CSS assets; CTA, source/provenance, unavailable routes, source isolation.`,
+    `PASS ${assets.size} JS/CSS assets; editable data endpoints, CTA, source/provenance, unavailable routes, source isolation.`,
   );
   console.log(
     "Production HTTP smoke passed. Browser interactions are a separate manual/CUA check.",

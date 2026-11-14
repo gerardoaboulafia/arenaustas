@@ -4,7 +4,7 @@ import { Header, Footer } from "@/components/shell";
 export const metadata: Metadata = {
   title: "ASTRA — Mission intelligence",
   description:
-    "Explore synthetic astronaut telemetry, explainable signals and transparent 30-day planning scenarios. Independent research prototype.",
+    "Follow a 180-day fictional mission with editable 15-minute telemetry, crew comparisons and transparent 30-day scenarios. Independent research prototype.",
 };
 export default function RootLayout({
   children,

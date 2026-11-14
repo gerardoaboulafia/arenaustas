@@ -1,5 +1,13 @@
 # ASTRA release handoff
 
+## Current 180-day revision
+
+The active local product now uses the 180-day simulator. Start at `/mission`; use **Mission schedule** to inspect the entire plan, **Start mission** to begin playback, **Playback speed** to accelerate, and **Review day** / **Follow present** to inspect history independently. **Data & configuration** opens `/mission/data` for editable inputs and new indicators. The current guide is `EDITABLE_MISSION.md`; current verification is at the top of `TEST_REPORT.md`.
+
+The original demo walkthrough and release archive below describe the earlier daily-fixture release. The original fixture remains only for regression checks; do not use its day-149 walkthrough for the new product. Rebuild `out/` before packaging a fresh hosted release. Local source-file edits are loaded without rebuilding by `npm start`.
+
+## Original release handoff (historical)
+
 All application code is in this folder. No required API key, authentication, backend, external font or live NASA request. The original fixture and PDF are preserved.
 
 ## Start
