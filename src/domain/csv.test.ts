@@ -2,6 +2,7 @@
 // Checks carried over from the team's `astra` branch: data that leaves the tool comes back unchanged,
 // a bad file changes nothing, a missing value stays missing, and nothing reads the future.
 import { describe, expect, it } from 'vitest';
+import { initials } from '../app/crew';
 import { CSV_HEADER, applyOverrides, buildTwin, createDataset, evaluateIndicator, exportReadings, importReadings, indicators, modelById, rules, sourceById } from './index';
 
 const base = createDataset();
@@ -108,8 +109,9 @@ describe('no reading from the future reaches the twin', () => {
 });
 
 describe('crew', () => {
-  it('is four fictional people with a role each', () => {
-    expect(base.crew.map((c) => c.label)).toEqual(['Maya Torres', 'Eli Chen', 'Sofia Okafor', 'Noah Patel']);
+  it('is four fictional people with a call sign from calculus and a role each', () => {
+    expect(base.crew.map((c) => c.label)).toEqual(['Stokes', 'Green', 'Gauss', 'Riemann']);
+    expect(new Set(base.crew.map((c) => initials(c.label))).size).toBe(4);
     expect(base.crew.every((c) => c.role.length > 0)).toBe(true);
   });
 });

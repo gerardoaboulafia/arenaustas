@@ -52,7 +52,7 @@ No language model runs in the product. Every threshold, action and model paramet
 
 **What is real and what is not**
 
-- All crew data is simulated from a fixed seed. The four crew members are fictional. No real astronaut data is used.
+- All crew data is simulated from a fixed seed. The four crew members are fictional; their call signs (Stokes, Green, Gauss, Riemann) are surnames from calculus. No real astronaut data is used.
 - Sourced from NASA and the Canadian Space Agency: the five hazards, the base rate of the bone model, the cabin CO2 limit, the career radiation limit, and the neutron share of the radiation dose.
 - Every other threshold, action text and model parameter is an assumption chosen to make the prototype work. The tool tags each one. No clinician has reviewed them.
 - The projected mission radiation dose is compared with NASA's career limit of 600 mSv. The tool sets no lower watch level, because none was taken from a source.
@@ -88,7 +88,7 @@ What the AI assistant did:
 - Wrote the source code, the tests, the simulated dataset, the site text, the demo slides and this Project page text.
 - Compared the team's two prototypes and combined them into the submitted build.
 
-A teammate built a second prototype with another AI coding assistant (OpenAI Codex). The crew view, the named fictional crew and the export and import of readings come from that prototype and were written again for the submitted build.
+A teammate built a second prototype with another AI coding assistant (OpenAI Codex). The crew view, the idea of a named crew with roles and the export and import of readings come from that prototype and were written again for the submitted build.
 
 Machine learning inside the product: the pattern check described above, an unsupervised statistical model (mean and covariance of the baseline days, Mahalanobis distance) fitted in the browser on each simulated astronaut's own readings.
 

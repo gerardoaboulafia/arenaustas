@@ -197,7 +197,7 @@ function useSlides(): { name: string; body: ReactNode }[] {
               </li>
               <li>
                 <p className="font-semibold text-accent">What-if</p>
-                <p className="mt-1">Here Sofia has slept about 5 hours a night. With 8 hours, the projected sleep debt goes from 19.8 h to 0, and from alert to nominal.</p>
+                <p className="mt-1">Here Gauss has slept about 5 hours a night. With 8 hours, the projected sleep debt goes from 19.8 h to 0, and from alert to nominal.</p>
               </li>
             </ul>
             <p className="mt-auto text-[13px] text-muted">A simplified projection from explicit models, not a prediction. Each chart shows its model, its source and its limits.</p>

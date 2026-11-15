@@ -102,7 +102,7 @@ Our own features:
 Added on 2026-11-15 from a teammate's prototype (the `astra` branch), when a team member asked to combine the best of both builds:
 
 6. **Crew view.** The whole crew on one screen for the crew medical officer, with one indicator compared across everyone.
-7. **Named fictional crew.** Maya Torres, Eli Chen, Sofia Okafor and Noah Patel, each with a role.
+7. **Named fictional crew.** Four crew members, each with a role. On 2026-11-15 a team member asked for names from calculus: the call signs are Stokes, Green, Gauss and Riemann (the first two given by the team member, the other two completed by Claude in the same family).
 8. **Export and import of readings** as a CSV file. Every row is checked, a wrong file changes nothing, and the future is never exported.
 
 ## 6. What "act" means in our tool

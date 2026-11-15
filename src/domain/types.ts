@@ -145,7 +145,7 @@ export type Series = (number | null)[];
 
 export interface CrewMember {
   id: string;
-  /** A fictional name. The crew is taken from the team's `astra` branch. */
+  /** A fictional crew member's call sign: a surname from calculus. */
   label: string;
   role: string;
   /** One value per mission day, starting at the dataset's firstDay. */

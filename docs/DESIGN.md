@@ -215,7 +215,7 @@ What this branch does well: the twin figure and four body systems, the 30-day pr
 What was combined, re-implemented here with no code copied:
 
 - **Crew screen** (`/#/app/crew`, `src/app/CrewPage.tsx`). A table of who needs attention, worst first, with each body system, the pattern check and who to involve; and one indicator compared across the crew. The comparison can be drawn as recorded values or as the change from each person's own baseline, which joins his crew-wide chart with this branch's personal baseline. Each line has its own dash pattern and none uses a status color.
-- **Named fictional crew.** Maya Torres, Eli Chen, Sofia Okafor and Noah Patel, with their roles, replace "Crew member A to D".
+- **Named fictional crew.** Four named crew members with roles replace "Crew member A to D". The names first came from the `astra` branch; the team then changed them to call signs from calculus: Stokes, Green, Gauss and Riemann. The roles are still the ones from `astra`.
 - **Export and import of readings** (`src/domain/csv.ts`, Log screen). One row per day, crew member and indicator. Import checks every row and applies nothing if any is wrong; an empty value stays "no reading"; days after the current mission day are neither exported nor accepted.
 - **Tests carried over as ideas:** CSV round trip, atomic rejection, missing values, and a check that nothing recorded after a day changes that day's twin.
 
@@ -225,7 +225,7 @@ Left out on purpose: the 180-day schedule with activities and 15-minute telemetr
 
 Added on 2026-11-15, before the feature freeze, to answer the main weakness of the build: almost every threshold was an assumption.
 
-- **Cabin CO2.** NASA-STD-3001 limits the 1-hour average CO2 partial pressure in the habitable volume to 3 mmHg (technical brief OCHMO-TB-004). The indicator now has that limit on top of the personal-baseline rule: at or above it, the status is an alert whatever the baseline. The tool compares the limit with the mean of the last three daily readings and says that this is a simplification. In the simulated mission this turns Sofia Okafor's cabin CO2 from a watch into an alert.
+- **Cabin CO2.** NASA-STD-3001 limits the 1-hour average CO2 partial pressure in the habitable volume to 3 mmHg (technical brief OCHMO-TB-004). The indicator now has that limit on top of the personal-baseline rule: at or above it, the status is an alert whatever the baseline. The tool compares the limit with the mean of the last three daily readings and says that this is a simplification. In the simulated mission this turns one crew member's cabin CO2 (Gauss) from a watch into an alert.
 - **Radiation.** The career limit of 600 mSv (technical brief OCHMO-TB-020) is a parameter of the radiation model. The Projection screen shows the projected mission dose as a share of it. No lower watch level was invented.
 - Both numbers were read in NASA's own documents, and tests check that a sourced limit is never marked as an assumption.
 - Looked for and not found on the NASA pages already cited: a number for sleep need and a dose limit on the Space Radiation page. Those values stay assumptions.

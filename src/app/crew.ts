@@ -8,4 +8,8 @@ export const CREW_STYLE = [
   { color: '#f2a2d0', dash: '10 4 2 4' },
 ] as const;
 
-export const initials = (name: string) => name.split(/\s+/).map((part) => part[0] ?? '').join('').slice(0, 2).toUpperCase();
+/** Two letters for a badge or a line label: first letters of two words, or the first two letters of a single call sign. */
+export const initials = (name: string) => {
+  const parts = name.trim().split(/\s+/);
+  return (parts.length > 1 ? parts.map((part) => part[0] ?? '').join('') : name.trim()).slice(0, 2).toUpperCase();
+};

@@ -1,7 +1,8 @@
 // AI-assisted: written with Claude Code, reviewed by the team.
 // Simulated mission data. Seeded, so every load gives the same numbers.
 // None of these values describes a real person or a real mission.
-// The four fictional crew members (names and roles) come from the team's `astra` branch.
+// The crew is fictional. Their call signs are surnames from calculus (Stokes, Green, Gauss, Riemann),
+// chosen by the team; the four roles come from the team's `astra` branch.
 import type { CrewMember, Dataset, Series } from './types';
 
 export const FIRST_DAY = 120;
@@ -78,12 +79,12 @@ export function createDataset(): Dataset {
     simulated: true,
     crew: [
       member(
-        'a', 'Maya Torres', 'Mission Commander', 11,
+        'a', 'Stokes', 'Mission Commander', 11,
         common({}, { restingHr: 56, sleepHours: 7.6, hrvMs: 62, spo2: 97, skinTempC: 33.4, exerciseMin: 62 }),
         { bone: 98.9, muscle: 98.2, cardio: 98.6, radiation: 66 },
       ),
       member(
-        'b', 'Eli Chen', 'Flight Engineer', 22,
+        'b', 'Green', 'Flight Engineer', 22,
         common(
           { exerciseMin: { shift: { fromDay: 138, to: 32 } } },
           { restingHr: 60, sleepHours: 7.6, hrvMs: 55, spo2: 98, skinTempC: 33.1, exerciseMin: 56 },
@@ -91,7 +92,7 @@ export function createDataset(): Dataset {
         { bone: 97.45, muscle: 95.6, cardio: 96.4, radiation: 64 },
       ),
       member(
-        'c', 'Sofia Okafor', 'Science Officer', 33,
+        'c', 'Gauss', 'Science Officer', 33,
         common(
           {
             sleepHours: { shift: { fromDay: 143, to: 5.1 } },
@@ -106,7 +107,7 @@ export function createDataset(): Dataset {
       ),
       // Several small shifts at once, each inside its own limit: the case single-indicator rules miss.
       member(
-        'd', 'Noah Patel', 'Medical Officer', 44,
+        'd', 'Riemann', 'Medical Officer', 44,
         common(
           {
             sleepHours: { shift: { fromDay: 143, to: 7.6 } },

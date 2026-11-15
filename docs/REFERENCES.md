@@ -36,4 +36,4 @@ Every external resource used by the project. Add a row whenever a library, datas
 
 ## Team's own earlier work
 
-From the team's `astra` branch, written by a teammate with an AI coding assistant: the personal baseline with a persistence check, the no-data state, the agent trace, the mission-day replay, the color palette, the crew-wide comparison view, the export and import of readings with validation, and the names and roles of the four fictional crew members. The features were re-implemented here; no code was copied. The crew names and roles were taken as written.
+From the team's `astra` branch, written by a teammate with an AI coding assistant: the personal baseline with a persistence check, the no-data state, the agent trace, the mission-day replay, the color palette, the crew-wide comparison view, the export and import of readings with validation, and the roles of the four fictional crew members. The features were re-implemented here; no code was copied. The roles were taken as written. The crew's call signs (Stokes, Green, Gauss, Riemann) are the team's choice: surnames of mathematicians known from calculus, used only as names for fictional people.
