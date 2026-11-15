@@ -2,7 +2,7 @@
 
 One section per field of the NASA Space Apps Project page, ready to paste. Written with Claude Code from the facts in this repository.
 
-The two links below work once the repository is public and the site is published (see "Publish" at the end).
+The site and the repository are public since 2026-11-15. Both links below were opened signed out and work.
 
 ## 1. Project Name
 
@@ -157,31 +157,21 @@ Done in the repository:
 For the person who submits:
 
 - [ ] Check the team name and members on slide 1 against the team page on the Space Apps site. They come from `src/data/team.json`.
-- [ ] Publish (below), then open both links in a private window.
+- [x] Site and repository published on 2026-11-15; every page and the demo PDF were opened signed out.
+- [ ] Open both links yourself in a private window just before submitting.
 - [ ] Turn the edit Lock on, paste fields 1 to 8, upload the screenshots, Save Progress.
 - [ ] Tick the Terms and Conditions box and the original-work box, press "Submit for Judging", and confirm the banner. The deadline is Sunday Nov 15, 23:59 Local Event time.
 
 ## Publish
 
-The site needs a public repository. Publishing does not depend on GitHub Actions: the first command builds the site and pushes it to a `gh-pages` branch, which GitHub Pages then serves. From the project folder:
+Published on 2026-11-15. GitHub Pages serves the `gh-pages` branch at https://gerardoaboulafia.github.io/arenaustas/.
+
+After any change to the site, publish it again from the project folder:
 
 ```bash
 npm run publish:site
 ```
 
-```bash
-gh repo edit gerardoaboulafia/arenaustas --visibility public --accept-visibility-change-consequences
-```
+The command tests, builds and replaces the `gh-pages` branch. The live site updates about a minute later.
 
-```bash
-gh api -X POST repos/gerardoaboulafia/arenaustas/pages -f "source[branch]=gh-pages" -f "source[path]=/"
-```
-
-The site is then at https://gerardoaboulafia.github.io/arenaustas/ after about two minutes.
-
-Two things to know first:
-
-- On 2026-11-15 GitHub refused to run this repository's workflow with the message "your account is locked due to a billing issue". If the site does not appear, clear that at https://github.com/settings/billing and run the third command again.
-- Making the repository public also makes the `astra` branch public. Its README says its implementation began on November 13 and makes no claim of event-window compliance. Decide with the team whether that branch stays.
-
-After any change to the site, run `npm run publish:site` again.
+The public repository includes the `astra` branch, the team's second prototype. Its README says its implementation began on November 13 and makes no claim of event-window compliance; decide with the team whether that branch stays.
