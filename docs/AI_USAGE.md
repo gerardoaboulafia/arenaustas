@@ -23,3 +23,4 @@ The solution ideas are the team's. An AI tool helped compare them and write the 
 
 | 2026-11-15 | Claude Code (Claude) | Found that GitHub Actions does not run for this account (billing lock) and wrote a publish script that pushes the built site to a `gh-pages` branch instead; updated the publish steps | `scripts/publish-site.sh`, `package.json`, `README.md`, `docs/SUBMISSION.md` | |
 | 2026-11-15 | Claude Code (Claude) | After a team member said to publish: pushed the built site to the `gh-pages` branch, made the repository public, and checked every page and the demo PDF on the live site signed out | `gh-pages` branch, `docs/SUBMISSION.md` | |
+| 2026-11-15 | Claude Code (Claude) | Added two team members named by a team member to the site, the slides and the documents; re-exported the deck PDF and republished the site | `src/data/team.json`, `src/demo/DemoDeck.tsx`, `public/ASTRA-demo.pdf`, `README.md`, `docs/CONCEPT.md` | |

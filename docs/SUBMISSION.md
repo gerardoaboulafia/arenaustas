@@ -156,7 +156,7 @@ Done in the repository:
 
 For the person who submits:
 
-- [ ] Check the team name and members on slide 1 against the team page on the Space Apps site. They come from `src/data/team.json`.
+- [ ] Check the team name and the four members on slide 1 against the team page on the Space Apps site. They come from `src/data/team.json`.
 - [x] Site and repository published on 2026-11-15; every page and the demo PDF were opened signed out.
 - [ ] Open both links yourself in a private window just before submitting.
 - [ ] Turn the edit Lock on, paste fields 1 to 8, upload the screenshots, Save Progress.

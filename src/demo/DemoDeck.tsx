@@ -78,7 +78,7 @@ function useSlides(): { name: string; body: ReactNode }[] {
             </p>
             <div className="mt-11 border-t border-line pt-5">
               <p className="font-mono text-[13px] uppercase tracking-[0.18em] text-muted">Team {team.name}</p>
-              <p className="mt-1.5 text-[22px] font-semibold">{team.members.join(' · ')}</p>
+              <p className="mt-1.5 text-[19px] font-semibold text-balance">{team.members.join(' · ')}</p>
             </div>
           </div>
           <div className="flex flex-col items-center">

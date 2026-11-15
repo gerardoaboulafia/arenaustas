@@ -10,7 +10,7 @@ The ideas in this file are the team's. On 2026-11-13 the team shared seven candi
 | # | Question | Decision | Decided by |
 |---|---|---|---|
 | 1 | Final name and tagline | **ASTRA**, Astronaut Health Digital Twin. The tagline is the question the team wrote in its notes (§3), shortened: "How could you be 30 days from now?" | Team's words; chosen by Claude under delegation, 2026-11-14 |
-| 2 | Team name and members | Team **Arenaustas**: Gerardo Aboulafia and Santiago Arena. Taken from the repository name and its commit authors | Recorded by Claude, 2026-11-14 |
+| 2 | Team name and members | Team **Arenaustas**: Gerardo Aboulafia, Santiago Arena, Álvaro Hernández and Nicolás Masino. The name and the first two were taken from the repository and its commit authors; a team member added the other two on 2026-11-15 | Recorded by Claude, 2026-11-14 and 2026-11-15 |
 | 3 | Are the agents LLM-powered? | No. The five agents are rule-based modules (team, 2026-11-13). A team member then asked for machine learning where possible: the Biometric Agent also runs a small statistical model learned from each astronaut's own baseline readings. The Medical Advisor stays rule-based and no LLM is used | Team |
 | 4 | Indicators named in NASA's brief but not in the notes | All four are included: blood pressure, blood sugar, body temperature and mood. Mood covers behavioral health | Claude under delegation, 2026-11-14 |
 | 5 | When to involve a crewmate or the flight surgeons | Escalation ladder. Watch: the astronaut acts alone. Alert: the crew medical officer is involved. An alert lasting four days or more: reported to the flight surgeons in the next scheduled message to the ground. The day count is an assumption that needs review | Claude under delegation, 2026-11-14 |
@@ -22,7 +22,7 @@ The ideas in this file are the team's. On 2026-11-13 the team shared seven candi
 - Project name: ASTRA, Astronaut Health Digital Twin
 - Tagline (one sentence): How could you be 30 days from now?
 - Team name: Arenaustas
-- Team members: Gerardo Aboulafia, Santiago Arena
+- Team members: Gerardo Aboulafia, Santiago Arena, Álvaro Hernández, Nicolás Masino
 
 ## 2. User and setting
 

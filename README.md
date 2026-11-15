@@ -6,7 +6,7 @@ ASTRA creates a digital twin of each astronaut that evolves during the mission. 
 
 **Prototype. Not a medical device. All crew data is simulated.**
 
-- Team Arenaustas: Gerardo Aboulafia, Santiago Arena
+- Team Arenaustas: Gerardo Aboulafia, Santiago Arena, Álvaro Hernández, Nicolás Masino
 - Site: https://gerardoaboulafia.github.io/arenaustas/
 - Demo, 7 slides: [public/ASTRA-demo.pdf](public/ASTRA-demo.pdf), or `/#/demo` on the site
 - Project page text: [docs/SUBMISSION.md](docs/SUBMISSION.md)
