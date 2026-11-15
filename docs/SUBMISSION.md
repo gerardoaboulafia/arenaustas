@@ -163,18 +163,25 @@ For the person who submits:
 
 ## Publish
 
-The site needs a public repository. From the project folder:
+The site needs a public repository. Publishing does not depend on GitHub Actions: the first command builds the site and pushes it to a `gh-pages` branch, which GitHub Pages then serves. From the project folder:
+
+```bash
+npm run publish:site
+```
 
 ```bash
 gh repo edit gerardoaboulafia/arenaustas --visibility public --accept-visibility-change-consequences
 ```
 
 ```bash
-gh api -X POST repos/gerardoaboulafia/arenaustas/pages -f build_type=workflow
-```
-
-```bash
-gh workflow run deploy.yml --ref main
+gh api -X POST repos/gerardoaboulafia/arenaustas/pages -f "source[branch]=gh-pages" -f "source[path]=/"
 ```
 
 The site is then at https://gerardoaboulafia.github.io/arenaustas/ after about two minutes.
+
+Two things to know first:
+
+- On 2026-11-15 GitHub refused to run this repository's workflow with the message "your account is locked due to a billing issue". If the site does not appear, clear that at https://github.com/settings/billing and run the third command again.
+- Making the repository public also makes the `astra` branch public. Its README says its implementation began on November 13 and makes no claim of event-window compliance. Decide with the team whether that branch stays.
+
+After any change to the site, run `npm run publish:site` again.

@@ -69,7 +69,7 @@ docs/demo/shots/      screenshots used in the deck and on the Project page
 
 ## Deploy
 
-`.github/workflows/deploy.yml` tests and builds on every push. To publish to GitHub Pages, make the repository public, set Pages to "GitHub Actions" in the repository settings, and run the workflow by hand from the Actions tab. The exact commands are at the end of [docs/SUBMISSION.md](docs/SUBMISSION.md).
+`npm run publish:site` tests, builds and pushes the site to the `gh-pages` branch, which GitHub Pages serves once the repository is public. The exact commands are at the end of [docs/SUBMISSION.md](docs/SUBMISSION.md). `.github/workflows/deploy.yml` also tests and builds on every push when GitHub Actions is available for the account.
 
 After changing a slide, export the PDF again: open `/#/demo`, press "Save as PDF", and save it as `public/ASTRA-demo.pdf`.
 
