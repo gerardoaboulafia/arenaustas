@@ -33,11 +33,18 @@ export function evaluateIndicator(indicator: Indicator, series: Series, dayIndex
   const history = series.slice(Math.max(0, dayIndex - 13), dayIndex + 1);
   const today = series[dayIndex] ?? null;
   const base = { indicator, today, history };
+  // A sourced limit needs no baseline: it holds for everyone.
+  const { limit } = indicator;
+  const recentMean = recentValues.length >= rules.minRecentReadings ? mean(recentValues) : null;
+  const overLimit = limit !== undefined && recentMean !== null && recentMean >= limit.alert;
+  const limitReason = limit && recentMean !== null
+    ? `Your last ${rules.recentDays} days average ${format(recentMean)} ${indicator.unit}, at or above the limit of ${limit.alert} ${indicator.unit} (${limit.label}).`
+    : '';
 
   if (baselineValues.length < rules.minBaselineReadings || recentValues.length < rules.minRecentReadings) {
     return {
-      ...base, status: 'no-data', recent: mean(recentValues), baseline: mean(baselineValues), watchAt: null, alertAt: null,
-      reason: 'Not enough readings to compare with your baseline.',
+      ...base, status: overLimit ? 'alert' : 'no-data', recent: mean(recentValues), baseline: mean(baselineValues), watchAt: null, alertAt: null, overLimit,
+      reason: overLimit ? limitReason : 'Not enough readings to compare with your baseline.',
     };
   }
 
@@ -49,16 +56,17 @@ export function evaluateIndicator(indicator: Indicator, series: Series, dayIndex
   const alertStep = step(alert);
   const diff = recent - baseline;
   const bad = direction === 'lower' ? -diff : direction === 'higher' ? diff : Math.abs(diff);
-  const status: Status = bad >= alertStep ? 'alert' : bad >= watchStep ? 'watch' : 'nominal';
+  const status: Status = overLimit || bad >= alertStep ? 'alert' : bad >= watchStep ? 'watch' : 'nominal';
   const sign = direction === 'lower' ? -1 : 1;
   const side = direction === 'both' ? 'away from' : direction === 'lower' ? 'below' : 'above';
 
   return {
-    ...base, status, recent, baseline,
+    ...base, status, recent, baseline, overLimit,
     watchAt: baseline + sign * watchStep,
     alertAt: baseline + sign * alertStep,
     reason:
-      status === 'nominal'
+      overLimit ? limitReason
+      : status === 'nominal'
         ? `Your last ${rules.recentDays} days average ${format(recent)} ${indicator.unit}, close to your baseline of ${format(baseline)}.`
         : `Your last ${rules.recentDays} days average ${format(recent)} ${indicator.unit}, ${format(Math.abs(diff))} ${side} your baseline of ${format(baseline)}.`,
   };

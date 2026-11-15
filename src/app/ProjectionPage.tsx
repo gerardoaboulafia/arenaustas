@@ -21,6 +21,7 @@ function ModelCard({ projection }: { projection: Projection }) {
           <div className="mt-3 flex flex-wrap items-center gap-2">
             <BasisTag basis={model.basis} needsReview={model.needsReview} />
             <SourceLink sourceId={model.sourceId} />
+            {model.alsoSourceIds?.map((id) => <SourceLink key={id} sourceId={id} />)}
           </div>
         </div>
         <dl className="inset self-start p-3.5 text-sm">
@@ -44,6 +45,7 @@ export function ProjectionPage() {
   const tabId = focusSystem ?? worst.system.id;
   const system = twin.systems.find((s) => s.system.id === tabId);
   const projection = system ? system.projection : twin.radiation;
+  const careerLimit = twin.radiation.model.parameters.careerLimitMsv;
   const unit = system ? system.system.measure.unit : 'mSv since launch';
   const decimals = system ? system.system.measure.decimals : 1;
   const title = system ? system.system.measure.name : 'Mission radiation dose';
@@ -168,6 +170,19 @@ export function ProjectionPage() {
             </div>
           )}
           {!system && (
+            <div className="inset mt-2 flex flex-wrap items-center gap-x-4 gap-y-2 p-3 text-sm">
+              <StatusBadge status={end(projection.scenario) >= careerLimit ? 'alert' : 'nominal'} />
+              <span>
+                Day +30: <span className="font-mono">{round((end(projection.scenario) / careerLimit) * 100, 1)}%</span> of NASA's career limit of <span className="font-mono">{careerLimit} mSv</span>
+              </span>
+              <span className="h-2 min-w-[140px] flex-1 overflow-hidden rounded-full bg-panel2" role="img" aria-label={`${round((end(projection.scenario) / careerLimit) * 100, 1)} percent of the career limit`}>
+                <span className="block h-full rounded-full bg-accent" style={{ width: `${Math.min(100, (end(projection.scenario) / careerLimit) * 100)}%` }} />
+              </span>
+              <BasisTag basis="nasa" />
+              <span className="basis-full text-xs text-muted">The limit counts every flight of a career. This is the dose of this mission only.</span>
+            </div>
+          )}
+          {!system && (
             <p className="inset mt-2 p-3 text-sm text-muted">
               Estimated neutron part at day +30: <span className="font-mono text-ink">{round(end(projection.scenario) * projection.model.parameters.neutronShare, 1)} mSv</span>
               {' '}({Math.round(projection.model.parameters.neutronShare * 100)}% of the total, the Canadian Space Agency's figure for the International Space Station).
@@ -189,12 +204,12 @@ export function ProjectionPage() {
                   <StatusBadge status={c.before} className="!px-1.5 !py-0.5" /><span aria-hidden>→</span><StatusBadge status={c.after} className="!px-1.5 !py-0.5" />
                 </span>
               ) : (
-                <span className="text-[11px] text-muted">{round(end(c.projection.baseline), 1)} → {round(end(c.projection.scenario), 1)} mSv · no status bands yet</span>
+                <span className="text-[11px] text-muted">{round(end(c.projection.baseline), 1)} → {round(end(c.projection.scenario), 1)} mSv · {round((end(c.projection.scenario) / careerLimit) * 100, 0)}% of the career limit</span>
               )}
             </button>
           ))}
         </div>
-        <p className="mt-3 text-xs text-muted">Each card: day +30 if nothing changes → day +30 with your changes. Radiation has no status because we have not verified a dose limit from a source yet.</p>
+        <p className="mt-3 text-xs text-muted">Each card: day +30 if nothing changes → day +30 with your changes. Radiation is compared with NASA's career limit of {careerLimit} mSv; the tool sets no lower watch level.</p>
       </Card>
 
       <ModelCard projection={projection} />

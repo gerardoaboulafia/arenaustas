@@ -1,6 +1,6 @@
 // AI-assisted: written with Claude Code, reviewed by the team.
 // Landing page: explains how ASTRA works, then leads into the tool.
-// Lines marked TODO(team) are the team's to write (docs/CONCEPT.md); do not fill them in.
+// Tagline, team name and members come from src/data/team.json (recorded in docs/CONCEPT.md).
 import { useMemo, useState } from 'react';
 import type { MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
@@ -19,9 +19,9 @@ const AGENTS = [
 ];
 
 const STEPS = [
-  ['01', 'Gather', 'Log today\'s readings by hand or let the simulated telemetry stream fill them in: heart rate, blood pressure, blood sugar, body temperature, sleep and mood, plus heart rate variability, blood oxygen, exercise, cabin CO2 and radiation dose.'],
+  ['01', 'Gather', 'Log today\'s readings by hand, import them as a file, or let the simulated telemetry stream fill them in: heart rate, blood pressure, blood sugar, body temperature, sleep and mood, plus heart rate variability, blood oxygen, exercise, cabin CO2 and radiation dose.'],
   ['02', 'Evaluate', 'Your twin shows the status of muscle, bone, cardiovascular system and circadian rhythm today, each compared with your own baseline, and a simplified 30-day projection of where it is heading.'],
-  ['03', 'Act', 'The Medical Advisor suggests preventive actions and says who to involve: you, the crew medical officer, or the flight surgeons on the ground. Run a what-if to see the projected effect of a countermeasure before you commit to it.'],
+  ['03', 'Act', 'The Medical Advisor suggests preventive actions and says who to involve: you, the crew medical officer, who sees the whole crew on one screen, or the flight surgeons on the ground. Run a what-if to see the projected effect of a countermeasure before you commit to it.'],
 ];
 
 const go = (id: string) => (e: MouseEvent) => {
@@ -118,8 +118,6 @@ export function LandingPage() {
           <p className="mt-7 max-w-xl text-lg text-muted">
             ASTRA creates a digital twin of each astronaut that evolves during the mission and makes it possible to anticipate health risks.
           </p>
-          {/* The tagline is the team's to write: set it in src/data/team.json. Nothing shows until then. */}
-          {team.tagline && <p className="mt-4 text-lg font-medium">{team.tagline}</p>}
           <div className="mt-9 flex flex-wrap items-center gap-4">
             <Link to="/app" className={`${buttonPrimary} !min-h-13 !px-7 !text-base`}>Open the tool →</Link>
             <a href="#try" className={`${buttonSecondary} !min-h-13`} onClick={go('try')}>Try a what-if here</a>
@@ -204,7 +202,7 @@ export function LandingPage() {
           </div>
 
           <h3 className="mt-20 text-3xl font-semibold">Five agents</h3>
-          <p className="mt-2 max-w-2xl text-muted">Rules, plus one small statistical model that learns each astronaut's own normal pattern. No language model. Every rule and model carries a source or is marked as an assumption that needs review, and the tool shows which.</p>
+          <p className="mt-2 max-w-2xl text-muted">Rules, plus one small statistical model that learns each astronaut's own normal pattern. No language model. Every rule and model carries a source or is tagged as an assumption, and the tool shows which. Values tagged as assumptions are illustrative: no clinician has reviewed them.</p>
           <ol className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
             {AGENTS.map(([name, text, out], i) => (
               <li key={name} className="panel relative flex flex-col p-4">
@@ -294,21 +292,15 @@ export function LandingPage() {
       <section className="border-t border-line bg-panel/50">
         <div className="mx-auto flex max-w-[1240px] flex-wrap items-end justify-between gap-8 px-4 py-20 sm:px-8">
           <div>
-            {/* Team name and members are the team's to write: set them in src/data/team.json. */}
-            {team.name ? (
-              <>
-                <Eyebrow>Team</Eyebrow>
-                <p className="mt-4 font-display text-3xl font-semibold tracking-tight">{team.name}</p>
-                {team.members.length > 0 && <p className="mt-2 text-muted">{(team.members as string[]).join(' · ')}</p>}
-              </>
-            ) : (
-              <>
-                <Eyebrow>Open the tool</Eyebrow>
-                <p className="mt-4 max-w-xl font-display text-3xl font-semibold tracking-tight">Select a crew member, observe their twin, simulate a change.</p>
-              </>
-            )}
+            <Eyebrow>Team</Eyebrow>
+            <p className="mt-4 font-display text-3xl font-semibold tracking-tight">{team.name}</p>
+            <p className="mt-2 text-muted">{team.members.join(' · ')}</p>
+            <p className="mt-4 max-w-xl text-sm text-muted">{team.event}. Challenge: {team.challenge}.</p>
           </div>
-          <Link to="/app" className={`${buttonPrimary} !min-h-13 !px-7 !text-base`}>Open the tool →</Link>
+          <div className="flex flex-wrap items-center gap-4">
+            <Link to="/demo" className={`${buttonSecondary} !min-h-13`}>See the 7-slide demo</Link>
+            <Link to="/app" className={`${buttonPrimary} !min-h-13 !px-7 !text-base`}>Open the tool →</Link>
+          </div>
         </div>
       </section>
 
@@ -317,6 +309,9 @@ export function LandingPage() {
           <p>Prototype. Not a medical device. All crew data is simulated.</p>
           <p>Built for the NASA Space Apps Challenge 2026. Not affiliated with or endorsed by NASA.</p>
           <p>Parts of this site's code and text were written with an AI assistant (Claude Code) and reviewed by the team. The solution concept is the team's.</p>
+          <p>
+            <a href={team.repo} target="_blank" rel="noreferrer" className="text-accent underline decoration-accent/40 underline-offset-2">Source code on GitHub</a>
+          </p>
         </div>
       </footer>
     </div>

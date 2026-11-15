@@ -1,6 +1,7 @@
 // AI-assisted: written with Claude Code, reviewed by the team.
 // Simulated mission data. Seeded, so every load gives the same numbers.
 // None of these values describes a real person or a real mission.
+// The four fictional crew members (names and roles) come from the team's `astra` branch.
 import type { CrewMember, Dataset, Series } from './types';
 
 export const FIRST_DAY = 120;
@@ -38,6 +39,7 @@ function series(rand: () => number, c: Channel): Series {
 function member(
   id: string,
   label: string,
+  role: string,
   seed: number,
   channels: Record<string, Channel>,
   start: Record<string, number>,
@@ -45,7 +47,7 @@ function member(
   const rand = mulberry32(seed);
   const readings: Record<string, Series> = {};
   for (const [key, channel] of Object.entries(channels)) readings[key] = series(rand, channel);
-  return { id, label, readings, start };
+  return { id, label, role, readings, start };
 }
 
 const common = (overrides: Record<string, Partial<Channel>>, bases: Record<string, number>): Record<string, Channel> => {
@@ -76,12 +78,12 @@ export function createDataset(): Dataset {
     simulated: true,
     crew: [
       member(
-        'a', 'Crew member A', 11,
+        'a', 'Maya Torres', 'Mission Commander', 11,
         common({}, { restingHr: 56, sleepHours: 7.6, hrvMs: 62, spo2: 97, skinTempC: 33.4, exerciseMin: 62 }),
         { bone: 98.9, muscle: 98.2, cardio: 98.6, radiation: 66 },
       ),
       member(
-        'b', 'Crew member B', 22,
+        'b', 'Eli Chen', 'Flight Engineer', 22,
         common(
           { exerciseMin: { shift: { fromDay: 138, to: 32 } } },
           { restingHr: 60, sleepHours: 7.6, hrvMs: 55, spo2: 98, skinTempC: 33.1, exerciseMin: 56 },
@@ -89,7 +91,7 @@ export function createDataset(): Dataset {
         { bone: 97.45, muscle: 95.6, cardio: 96.4, radiation: 64 },
       ),
       member(
-        'c', 'Crew member C', 33,
+        'c', 'Sofia Okafor', 'Science Officer', 33,
         common(
           {
             sleepHours: { shift: { fromDay: 143, to: 5.1 } },
@@ -104,7 +106,7 @@ export function createDataset(): Dataset {
       ),
       // Several small shifts at once, each inside its own limit: the case single-indicator rules miss.
       member(
-        'd', 'Crew member D', 44,
+        'd', 'Noah Patel', 'Medical Officer', 44,
         common(
           {
             sleepHours: { shift: { fromDay: 143, to: 7.6 } },

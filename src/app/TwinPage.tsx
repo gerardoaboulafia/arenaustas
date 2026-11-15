@@ -9,6 +9,7 @@ import { TwinFigure } from '../components/ui/TwinFigure';
 import {
   AgentTag, BasisTag, Card, ProjectionNote, STATUS_HEX, SourceLink, StatusBadge, StatusIcon, buttonPrimary, buttonSecondary, statusText,
 } from '../components/ui/primitives';
+import { initials } from './crew';
 import { useMission } from './state';
 import { WHAT_IF, snap } from './whatIf';
 
@@ -151,7 +152,7 @@ export function TwinPage() {
             return (
               <button key={t.crew.id} type="button" aria-pressed={on} onClick={() => setCrewId(t.crew.id)}
                 className={`inset flex min-h-12 items-center gap-3 px-3.5 py-2 text-left transition ${on ? 'glow-accent !border-accent' : 'hover:border-muted'}`}>
-                <span className="grid h-8 w-8 place-items-center rounded-full border border-line bg-panel2 font-display text-sm font-semibold">{t.crew.label.slice(-1)}</span>
+                <span className="grid h-8 w-8 place-items-center rounded-full border border-line bg-panel2 font-display text-xs font-semibold">{initials(t.crew.label)}</span>
                 <span className="flex flex-col">
                   <span className="text-[13px] font-semibold leading-tight">{t.crew.label}</span>
                   <span className="mt-1 flex items-center gap-1" aria-label={`Overall: ${overallStatus(t)}`}>
@@ -165,123 +166,124 @@ export function TwinPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-5 xl:grid-cols-[minmax(0,1fr)_minmax(0,390px)]">
-        <section className="panel min-w-0 p-5">
-          <header className="flex flex-wrap items-center justify-between gap-3">
-            <div className="flex items-baseline gap-3">
-              <h2 className="text-[17px] font-semibold tracking-tight">Digital twin</h2>
-              <AgentTag agent="Physiology Agent" />
-            </div>
-            <div className="inset flex flex-wrap gap-1 p-1" role="group" aria-label="Twin view">
-              {(['today', 'baseline', 'scenario'] as View[]).map((v) => (
-                <button key={v} type="button" disabled={v === 'scenario' && !hasScenario} aria-pressed={shownView === v} onClick={() => setView(v)}
-                  className={`min-h-9 rounded-[10px] px-3 text-xs font-semibold transition disabled:opacity-40 ${shownView === v ? 'bg-accent text-bg' : 'text-muted hover:text-ink'}`}>
-                  {VIEW_LABEL[v]}
-                </button>
-              ))}
-            </div>
-          </header>
-
-          <div className="mt-4 grid grid-cols-1 items-center gap-4 lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]">
-            <div className="order-2 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:order-1 lg:grid-cols-1">
-              {left.map((s) => <SystemCard key={s.system.id} s={s} view={shownView} active={active.system.id === s.system.id} onSelect={() => setSelected(s.system.id)} />)}
-            </div>
-            <div className="order-1 flex flex-col items-center lg:order-2">
-              <TwinFigure statuses={statuses} selected={active.system.id} onSelect={setSelected} projected={shownView !== 'today'} height={520} />
-              <p className="mt-1 flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-muted">
-                {shownView === 'today' ? `Day ${day}` : `Day ${day + 30}`}
-                {shownView !== 'today' && <ProjectionNote />}
-              </p>
-            </div>
-            <div className="order-3 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-1">
-              {right.map((s) => <SystemCard key={s.system.id} s={s} view={shownView} active={active.system.id === s.system.id} onSelect={() => setSelected(s.system.id)} />)}
-            </div>
-          </div>
-
-          <div className="inset mt-4 flex flex-wrap items-center justify-between gap-x-6 gap-y-3 p-3.5 text-sm">
-            <div className="min-w-0 flex-1 basis-80">
-              <p><span className="font-semibold">{active.system.name}.</span> <span className="text-muted">{active.reason}</span></p>
-              <p className="mt-1 text-xs text-muted">
-                Driven by {active.system.drivers.map((id) => twin.indicators.find((r) => r.indicator.id === id)?.indicator.name.toLowerCase()).join(', ')} ·
-                {' '}hazard: {active.system.hazardIds.map((id) => hazardById(id)?.name.toLowerCase()).join(', ')}
-              </p>
-              <div className="mt-2 flex flex-wrap items-center gap-2">
-                <BasisTag basis={active.projection.model.basis} needsReview={active.projection.model.needsReview} />
-                <SourceLink sourceId={active.projection.model.sourceId} />
+      {/* Two columns on wide screens. Below that the wrappers dissolve and the cards follow the order classes. */}
+      <div className="grid grid-cols-1 items-start gap-5 xl:grid-cols-[minmax(0,1fr)_minmax(0,390px)]">
+        <div className="contents xl:flex xl:min-w-0 xl:flex-col xl:gap-5">
+          <section className="panel order-1 min-w-0 p-5 xl:order-none">
+            <header className="flex flex-wrap items-center justify-between gap-3">
+              <div className="flex items-baseline gap-3">
+                <h2 className="text-[17px] font-semibold tracking-tight">Digital twin</h2>
+                <AgentTag agent="Physiology Agent" />
               </div>
-            </div>
-            <button type="button" className={buttonPrimary} onClick={() => openProjection(active.system.id)}>Open 30-day projection</button>
-          </div>
-        </section>
-
-        <Card title="What to do" agent="Medical Advisor" className="self-start">
-          <p className="text-sm">{twin.summary}</p>
-          {twin.advice.length > 0 && (() => {
-            const rung = topEscalation(twin.advice);
-            const order = ['self', 'crew', 'ground'] as const;
-            return (
-              <div className="inset mt-3 p-3" title={rules.escalation.note}>
-                <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted">Who to involve now</p>
-                <p className="mt-1 text-sm font-semibold">{rules.escalation.labels[rung]}</p>
-                <ol className="mt-2 grid grid-cols-3 gap-1.5" aria-label="Escalation ladder">
-                  {order.map((step, i) => (
-                    <li key={step} className={`rounded-md px-2 py-1.5 text-center text-[11px] font-semibold ${i <= order.indexOf(rung) ? 'bg-accent text-bg' : 'bg-line/60 text-muted'}`}>
-                      {rules.escalation.short[step]}
-                    </li>
-                  ))}
-                </ol>
-              </div>
-            );
-          })()}
-          <ul className="mt-4 flex flex-col gap-3">
-            {twin.advice.map((item) => (
-              <li key={item.key} className="inset p-3.5">
-                <p className={`flex items-start gap-2 text-sm font-semibold ${statusText(item.status)}`}>
-                  <span className="mt-0.5"><StatusIcon status={item.status} /></span>
-                  {item.title}
-                </p>
-                <p className="mt-1 text-[13px] text-muted">{item.explanation}</p>
-                <p className="mt-2 text-[12px]">
-                  <span className={`rounded-md border px-1.5 py-0.5 font-semibold ${item.escalate === 'self' ? 'border-line text-muted' : 'border-accent text-accent'}`}>{rules.escalation.short[item.escalate]}</span>
-                  {item.alertDays > 0 && <span className="ml-2 text-muted">on alert for {item.alertDays} day{item.alertDays === 1 ? '' : 's'}</span>}
-                </p>
-                {item.actions.map((action) => (
-                  <div key={action.text} className="mt-3 border-t border-line pt-3">
-                    <p className="text-sm">{action.text}</p>
-                    <div className="mt-2 flex flex-wrap items-center gap-2">
-                      <BasisTag basis={action.basis} needsReview={action.needsReview} />
-                      {action.whatIf && (
-                        <button type="button" onClick={() => tryAction(action)} className="min-h-9 rounded-lg border border-accent px-3 text-xs font-semibold text-accent transition hover:bg-accent hover:text-bg">
-                          See projected effect →
-                        </button>
-                      )}
-                    </div>
-                  </div>
+              <div className="inset flex flex-wrap gap-1 p-1" role="group" aria-label="Twin view">
+                {(['today', 'baseline', 'scenario'] as View[]).map((v) => (
+                  <button key={v} type="button" disabled={v === 'scenario' && !hasScenario} aria-pressed={shownView === v} onClick={() => setView(v)}
+                    className={`min-h-9 rounded-[10px] px-3 text-xs font-semibold transition disabled:opacity-40 ${shownView === v ? 'bg-accent text-bg' : 'text-muted hover:text-ink'}`}>
+                    {VIEW_LABEL[v]}
+                  </button>
                 ))}
-                <p className="mt-3 flex flex-wrap items-center gap-x-2 text-[11px] text-muted">
-                  <span className="font-mono uppercase tracking-[0.1em]">{item.agent}</span>
-                  <SourceLink sourceId={item.sourceId} className="!text-[11px]" />
-                </p>
-              </li>
-            ))}
-          </ul>
-          <p className="mt-4 text-xs text-muted">Guidance is subject to mission protocols. It explains a signal; it is not a diagnosis.</p>
-          <Link to="/app/log" className={`${buttonSecondary} mt-4 w-full`}>Log today's readings</Link>
-        </Card>
-      </div>
+              </div>
+            </header>
 
-      <div className="grid grid-cols-1 gap-5 xl:grid-cols-[minmax(0,3fr)_minmax(0,1fr)]">
-        <Card title="Today's readings" agent="Biometric Agent">
-          <PatternCard />
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
-            {twin.indicators.filter((r) => r.indicator.agent === 'biometric').map((r) => <Tile key={r.indicator.id} result={r} highlighted={active.system.drivers.includes(r.indicator.id)} />)}
-          </div>
-        </Card>
-        <Card title="Cabin and exposure" agent="Environment Agent">
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-1">
-            {twin.indicators.filter((r) => r.indicator.agent === 'environment').map((r) => <Tile key={r.indicator.id} result={r} highlighted={false} />)}
-          </div>
-        </Card>
+            <div className="mt-4 grid grid-cols-1 items-center gap-4 lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]">
+              <div className="order-2 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:order-1 lg:grid-cols-1">
+                {left.map((s) => <SystemCard key={s.system.id} s={s} view={shownView} active={active.system.id === s.system.id} onSelect={() => setSelected(s.system.id)} />)}
+              </div>
+              <div className="order-1 flex flex-col items-center lg:order-2">
+                <TwinFigure statuses={statuses} selected={active.system.id} onSelect={setSelected} projected={shownView !== 'today'} height={520} />
+                <p className="mt-1 flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-muted">
+                  {shownView === 'today' ? `Day ${day}` : `Day ${day + 30}`}
+                  {shownView !== 'today' && <ProjectionNote />}
+                </p>
+              </div>
+              <div className="order-3 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-1">
+                {right.map((s) => <SystemCard key={s.system.id} s={s} view={shownView} active={active.system.id === s.system.id} onSelect={() => setSelected(s.system.id)} />)}
+              </div>
+            </div>
+
+            <div className="inset mt-4 flex flex-wrap items-center justify-between gap-x-6 gap-y-3 p-3.5 text-sm">
+              <div className="min-w-0 flex-1 basis-80">
+                <p><span className="font-semibold">{active.system.name}.</span> <span className="text-muted">{active.reason}</span></p>
+                <p className="mt-1 text-xs text-muted">
+                  Driven by {active.system.drivers.map((id) => twin.indicators.find((r) => r.indicator.id === id)?.indicator.name.toLowerCase()).join(', ')} ·
+                  {' '}hazard: {active.system.hazardIds.map((id) => hazardById(id)?.name.toLowerCase()).join(', ')}
+                </p>
+                <div className="mt-2 flex flex-wrap items-center gap-2">
+                  <BasisTag basis={active.projection.model.basis} needsReview={active.projection.model.needsReview} />
+                  <SourceLink sourceId={active.projection.model.sourceId} />
+                </div>
+              </div>
+              <button type="button" className={buttonPrimary} onClick={() => openProjection(active.system.id)}>Open 30-day projection</button>
+            </div>
+          </section>
+          <Card title="Today's readings" agent="Biometric Agent" className="order-3 xl:order-none">
+            <PatternCard />
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
+              {twin.indicators.filter((r) => r.indicator.agent === 'biometric').map((r) => <Tile key={r.indicator.id} result={r} highlighted={active.system.drivers.includes(r.indicator.id)} />)}
+            </div>
+          </Card>
+        </div>
+        <div className="contents xl:flex xl:min-w-0 xl:flex-col xl:gap-5">
+          <Card title="What to do" agent="Medical Advisor" className="order-2 xl:order-none">
+            <p className="text-sm">{twin.summary}</p>
+            {twin.advice.length > 0 && (() => {
+              const rung = topEscalation(twin.advice);
+              const order = ['self', 'crew', 'ground'] as const;
+              return (
+                <div className="inset mt-3 p-3" title={rules.escalation.note}>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted">Who to involve now</p>
+                  <p className="mt-1 text-sm font-semibold">{rules.escalation.labels[rung]}</p>
+                  <ol className="mt-2 grid grid-cols-3 gap-1.5" aria-label="Escalation ladder">
+                    {order.map((step, i) => (
+                      <li key={step} className={`rounded-md px-2 py-1.5 text-center text-[11px] font-semibold ${i <= order.indexOf(rung) ? 'bg-accent text-bg' : 'bg-line/60 text-muted'}`}>
+                        {rules.escalation.short[step]}
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              );
+            })()}
+            <ul className="mt-4 flex flex-col gap-3">
+              {twin.advice.map((item) => (
+                <li key={item.key} className="inset p-3.5">
+                  <p className={`flex items-start gap-2 text-sm font-semibold ${statusText(item.status)}`}>
+                    <span className="mt-0.5"><StatusIcon status={item.status} /></span>
+                    {item.title}
+                  </p>
+                  <p className="mt-1 text-[13px] text-muted">{item.explanation}</p>
+                  <p className="mt-2 text-[12px]">
+                    <span className={`rounded-md border px-1.5 py-0.5 font-semibold ${item.escalate === 'self' ? 'border-line text-muted' : 'border-accent text-accent'}`}>{rules.escalation.short[item.escalate]}</span>
+                    {item.alertDays > 0 && <span className="ml-2 text-muted">on alert for {item.alertDays} day{item.alertDays === 1 ? '' : 's'}</span>}
+                  </p>
+                  {item.actions.map((action) => (
+                    <div key={action.text} className="mt-3 border-t border-line pt-3">
+                      <p className="text-sm">{action.text}</p>
+                      <div className="mt-2 flex flex-wrap items-center gap-2">
+                        <BasisTag basis={action.basis} needsReview={action.needsReview} />
+                        {action.whatIf && (
+                          <button type="button" onClick={() => tryAction(action)} className="min-h-9 rounded-lg border border-accent px-3 text-xs font-semibold text-accent transition hover:bg-accent hover:text-bg">
+                            See projected effect →
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                  <p className="mt-3 flex flex-wrap items-center gap-x-2 text-[11px] text-muted">
+                    <span className="font-mono uppercase tracking-[0.1em]">{item.agent}</span>
+                    <SourceLink sourceId={item.sourceId} className="!text-[11px]" />
+                  </p>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-4 text-xs text-muted">Guidance is subject to mission protocols. It explains a signal; it is not a diagnosis.</p>
+            <Link to="/app/log" className={`${buttonSecondary} mt-4 w-full`}>Log today's readings</Link>
+          </Card>
+          <Card title="Cabin and exposure" agent="Environment Agent" className="order-4 xl:order-none">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-1">
+              {twin.indicators.filter((r) => r.indicator.agent === 'environment').map((r) => <Tile key={r.indicator.id} result={r} highlighted={false} />)}
+            </div>
+          </Card>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 gap-5 xl:grid-cols-2">

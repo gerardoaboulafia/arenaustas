@@ -1,11 +1,64 @@
 // AI-assisted: written with Claude Code, reviewed by the team.
 // Gather: type today's readings over the simulated telemetry. Statuses update as you type.
-import { useState } from 'react';
-import { hazardById, overrideKey } from '../domain';
-import type { IndicatorResult } from '../domain';
+import { useRef, useState } from 'react';
+import { CSV_HEADER, hazardById, overrideKey } from '../domain';
+import type { ImportResult, IndicatorResult } from '../domain';
 import { DeviationBar, Sparkline } from '../components/ui/charts';
 import { AgentTag, BasisTag, Card, SourceLink, StatusBadge, buttonSecondary } from '../components/ui/primitives';
 import { useMission } from './state';
+
+/** Readings leave the tool and come back as CSV. A file with any wrong row changes nothing. */
+function DataPanel({ onImported }: { onImported: () => void }) {
+  const { day, exportCsv, importCsv } = useMission();
+  const input = useRef<HTMLInputElement>(null);
+  const [result, setResult] = useState<(ImportResult & { name: string }) | null>(null);
+
+  const download = () => {
+    const url = URL.createObjectURL(new Blob([exportCsv()], { type: 'text/csv' }));
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `astra-readings-day-${day}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const onFile = async (file: File | undefined) => {
+    if (!file) return;
+    const imported = importCsv(await file.text());
+    setResult({ ...imported, name: file.name });
+    if (imported.overrides) onImported();
+    if (input.current) input.current.value = '';
+  };
+
+  return (
+    <Card title="Export and import">
+      <p className="text-sm text-muted">Take the readings out as a CSV file, for example to send to the ground, and bring corrected readings back in. Every row is checked first.</p>
+      <div className="mt-3 flex flex-wrap gap-2">
+        <button type="button" className={buttonSecondary} onClick={download}>Export readings (CSV)</button>
+        <button type="button" className={buttonSecondary} onClick={() => input.current?.click()}>Import readings (CSV)</button>
+        <input ref={input} type="file" accept=".csv,text/csv" className="sr-only" aria-label="CSV file to import" onChange={(e) => void onFile(e.target.files?.[0])} />
+      </div>
+      <p className="mt-3 text-xs text-muted">
+        The export holds every crew member up to mission day {day}, never later days. Format: <code className="font-mono text-ink">{CSV_HEADER}</code>. An empty value means no reading.
+      </p>
+      {result && (
+        <div role="status" className={`inset mt-3 p-3 text-sm ${result.overrides ? '' : '!border-alert/70'}`}>
+          {result.overrides ? (
+            <p><span className="font-semibold">{result.name} imported.</span> <span className="text-muted">{result.rows} rows read, {result.changed} different from the simulated readings.</span></p>
+          ) : (
+            <>
+              <p className="font-semibold text-alert">{result.name} was not imported. Nothing changed.</p>
+              <ul className="mt-2 flex list-disc flex-col gap-1 pl-5 text-xs text-muted">
+                {result.errors.slice(0, 6).map((error) => <li key={error}>{error}</li>)}
+                {result.errors.length > 6 && <li>and {result.errors.length - 6} more.</li>}
+              </ul>
+            </>
+          )}
+        </div>
+      )}
+    </Card>
+  );
+}
 
 function ReadingsForm() {
   const { twin, crewId, day, overrides, setReading, resetReadings } = useMission();
@@ -81,13 +134,24 @@ function ReadingsForm() {
         </div>
       </Card>
 
-      <Card title={info.indicator.name} className="self-start">
+      <div className="flex min-w-0 flex-col gap-5 self-start">
+      <Card title={info.indicator.name}>
         <h3 className="text-xs font-semibold uppercase tracking-[0.1em] text-muted">Why it matters</h3>
         <p className="mt-1 text-sm">{info.indicator.whyItMatters}</p>
         <h3 className="mt-4 text-xs font-semibold uppercase tracking-[0.1em] text-muted">How to measure</h3>
         <p className="mt-1 text-sm">{info.indicator.howToMeasure}</p>
         <h3 className="mt-4 text-xs font-semibold uppercase tracking-[0.1em] text-muted">Your status</h3>
         <p className="mt-1 text-sm text-muted">{info.reason}</p>
+        {info.indicator.limit && (
+          <>
+            <h3 className="mt-4 text-xs font-semibold uppercase tracking-[0.1em] text-muted">Limit</h3>
+            <p className="mt-1 flex flex-wrap items-center gap-2 text-sm">
+              <span><span className="font-mono">{info.indicator.limit.alert} {info.indicator.unit}</span>, {info.indicator.limit.label}</span>
+              <BasisTag basis={info.indicator.limit.basis} />
+            </p>
+            <p className="mt-1 text-xs text-muted">{info.indicator.limit.note}</p>
+          </>
+        )}
         <h3 className="mt-4 text-xs font-semibold uppercase tracking-[0.1em] text-muted">Spaceflight hazard</h3>
         <ul className="mt-1 flex flex-col gap-2 text-sm">
           {info.indicator.hazardIds.map((id) => {
@@ -99,8 +163,10 @@ function ReadingsForm() {
           <BasisTag basis={info.indicator.basis} needsReview={info.indicator.needsReview} />
           <SourceLink sourceId={info.indicator.sourceId} />
         </div>
-        <p className="mt-2 text-xs text-muted">The source gives the context. The threshold itself is our assumption until a reviewer confirms it.</p>
+        <p className="mt-2 text-xs text-muted">The source gives the context{info.indicator.limit ? ' and the limit' : ''}. The threshold against your own baseline is our assumption; no clinician has reviewed it.</p>
       </Card>
+      <DataPanel onImported={() => setDrafts({})} />
+      </div>
     </div>
   );
 }

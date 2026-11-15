@@ -60,6 +60,7 @@ export function AppLayout() {
             <NavLink to="/app" end className={tab}>Twin</NavLink>
             <NavLink to="/app/projection" className={tab}>Projection</NavLink>
             <NavLink to="/app/log" className={tab}>Log readings</NavLink>
+            <NavLink to="/app/crew" className={tab}>Crew</NavLink>
           </nav>
           <div className="ml-auto flex flex-wrap items-center gap-x-4 gap-y-2">
             <DayControl />

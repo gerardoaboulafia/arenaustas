@@ -70,8 +70,11 @@ export function SimulatedBadge({ className = '' }: { className?: string }) {
 export function BasisTag({ basis, needsReview }: { basis: Basis; needsReview?: boolean }) {
   const label = basis === 'nasa' ? 'NASA source' : basis === 'partner' ? 'Partner source' : basis === 'clinical' ? 'Clinical source' : 'Assumption';
   return (
-    <span className={`inline-flex items-center rounded-md border px-2 py-0.5 text-[11px] font-medium ${basis === 'assumption' ? 'border-watch/50 text-watch' : 'border-accent/50 text-accent'}`}>
-      {label}{needsReview ? ' · needs review' : ''}
+    <span
+      title={needsReview ? 'Not taken from a source, or simplified from one. Illustrative until a flight surgeon reviews it.' : undefined}
+      className={`inline-flex items-center rounded-md border px-2 py-0.5 text-[11px] font-medium ${basis === 'assumption' ? 'border-watch/50 text-watch' : 'border-accent/50 text-accent'}`}
+    >
+      {label}
     </span>
   );
 }

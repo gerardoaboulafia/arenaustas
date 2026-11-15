@@ -177,7 +177,7 @@
   {
     "id": "skinTempC",
     "name": "Skin temperature",
-    "unit": "°C",
+    "unit": "\u00b0C",
     "agent": "biometric",
     "input": {
       "min": 25,
@@ -283,11 +283,11 @@
     },
     "basis": "assumption",
     "needsReview": true,
-    "sourceId": "nasa-hazards",
+    "sourceId": "nasa-co2-brief",
     "hazardIds": [
       "hostile-closed"
     ],
-    "whyItMatters": "The spacecraft is a closed environment, so the air you breathe depends on its life-support system.",
+    "whyItMatters": "The spacecraft is a closed environment, so the air you breathe depends on its life-support system. NASA's standard limits the 1-hour average CO2 partial pressure in the habitable volume to 3 mmHg, and NASA reports that keeping the 7-day average below 2.5 mmHg keeps the risk of headache under 1%.",
     "howToMeasure": "Read by the cabin sensor closest to your sleep station.",
     "actions": {
       "watch": [
@@ -304,6 +304,13 @@
           "needsReview": true
         }
       ]
+    },
+    "limit": {
+      "alert": 3,
+      "label": "NASA-STD-3001 limit, 1-hour average",
+      "basis": "nasa",
+      "sourceId": "nasa-co2-brief",
+      "note": "The standard is a 1-hour average. The tool compares it with the mean of the last 3 daily readings, which is a simplification."
     }
   },
   {
@@ -517,7 +524,7 @@
   {
     "id": "bodyTempC",
     "name": "Body temperature",
-    "unit": "°C",
+    "unit": "\u00b0C",
     "agent": "biometric",
     "input": {
       "min": 33,

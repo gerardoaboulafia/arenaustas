@@ -52,5 +52,23 @@
     "accessed": "2026-11-14",
     "challengeListed": true,
     "usedFor": "The neutron share of the radiation dose (about 30% of total radiation on the International Space Station), used to split the projected mission dose."
+  },
+  {
+    "id": "nasa-co2-brief",
+    "title": "NASA-STD-3001 Technical Brief: Carbon Dioxide (OCHMO-TB-004)",
+    "org": "NASA Office of the Chief Health and Medical Officer",
+    "url": "https://www.nasa.gov/wp-content/uploads/2023/12/ochmo-tb-004-carbon-dioxide.pdf",
+    "accessed": "2026-11-15",
+    "challengeListed": false,
+    "usedFor": "The alert limit of the cabin CO2 indicator: NASA-STD-3001 limits the 1-hour average CO2 partial pressure in the habitable volume to 3 mmHg."
+  },
+  {
+    "id": "nasa-radiation-brief",
+    "title": "NASA-STD-3001 Technical Brief: Radiation Protection (OCHMO-TB-020)",
+    "org": "NASA Office of the Chief Health and Medical Officer",
+    "url": "https://www.nasa.gov/wp-content/uploads/2023/12/ochmo-tb-020-radiation-protection.pdf",
+    "accessed": "2026-11-15",
+    "challengeListed": false,
+    "usedFor": "The career limit shown with the radiation projection: total career effective dose from spaceflight below 600 mSv."
   }
 ]

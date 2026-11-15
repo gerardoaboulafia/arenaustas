@@ -1,10 +1,12 @@
 // AI-assisted: written with Claude Code, reviewed by the team.
 import { HashRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { AppLayout } from './app/AppLayout';
+import { CrewPage } from './app/CrewPage';
 import { LogPage } from './app/LogPage';
 import { ProjectionPage } from './app/ProjectionPage';
 import { TwinPage } from './app/TwinPage';
 import { MissionProvider } from './app/state';
+import { DemoDeck } from './demo/DemoDeck';
 import { LandingPage } from './landing/LandingPage';
 
 // HashRouter: the site is static and works from any subpath (GitHub Pages) with no server rules.
@@ -18,7 +20,9 @@ export function AppRouter() {
             <Route index element={<TwinPage />} />
             <Route path="projection" element={<ProjectionPage />} />
             <Route path="log" element={<LogPage />} />
+            <Route path="crew" element={<CrewPage />} />
           </Route>
+          <Route path="/demo" element={<DemoDeck />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </HashRouter>

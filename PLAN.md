@@ -4,6 +4,8 @@ NASA Space Apps Challenge 2026 · Challenge: **Create Health Monitoring Software
 (Intermediate · Human Exploration, Software, Space Exploration)
 Challenge page: https://www.spaceappschallenge.org/2026/challenges/health-monitoring-software/
 
+> **Status, Sun Nov 15, midday.** The two prototypes are combined ([docs/DESIGN.md](docs/DESIGN.md) §15). The product, the 7-slide demo and the Project page text are done. Every open decision is settled in [docs/CONCEPT.md](docs/CONCEPT.md). What is left is for the person who submits: publish the site, paste the fields from [docs/SUBMISSION.md](docs/SUBMISSION.md), and press "Submit for Judging". The rest of this file is the plan as written on Friday; the build departed from it in places (no chart library, different data contract), described in [docs/DESIGN.md](docs/DESIGN.md) §11 to §14.
+
 ## 1. At a glance
 
 | | |

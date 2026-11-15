@@ -50,6 +50,8 @@ export interface Indicator {
   whyItMatters: string;
   howToMeasure: string;
   whatIfInput?: WhatIfInput;
+  /** An absolute limit from a source, applied on top of the personal-baseline rule. Readings at or above it are an alert. */
+  limit?: { alert: number; label: string; basis: Basis; sourceId: string; note: string };
   actions: { watch: ActionDef[]; alert: ActionDef[] };
 }
 
@@ -85,6 +87,8 @@ export interface ProjectionModel {
   limits: string;
   basis: Basis;
   sourceId?: string;
+  /** Sources of single parameters that differ from the model's own source. */
+  alsoSourceIds?: string[];
   needsReview?: boolean;
 }
 
@@ -141,7 +145,9 @@ export type Series = (number | null)[];
 
 export interface CrewMember {
   id: string;
+  /** A fictional name. The crew is taken from the team's `astra` branch. */
   label: string;
+  role: string;
   /** One value per mission day, starting at the dataset's firstDay. */
   readings: Record<string, Series>;
   /** Simulated measure values at the end of the day before firstDay. */
@@ -165,6 +171,8 @@ export interface IndicatorResult {
   baseline: number | null;
   watchAt: number | null;
   alertAt: number | null;
+  /** True when the recent mean is at or above the indicator's sourced limit. */
+  overLimit: boolean;
   history: Series;
   reason: string;
 }

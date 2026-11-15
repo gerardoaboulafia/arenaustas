@@ -102,15 +102,20 @@
     "form": "cumulative-sum",
     "description": "Mission dose is the sum of every daily dose since launch. An estimated share of it comes from neutrons.",
     "parameters": {
-      "neutronShare": 0.3
+      "neutronShare": 0.3,
+      "careerLimitMsv": 600
     },
     "parameterBasis": {
-      "neutronShare": "partner"
+      "neutronShare": "partner",
+      "careerLimitMsv": "nasa"
     },
     "horizonDays": 30,
-    "limits": "The total is arithmetic on the dosimeter readings. The neutron share is the Canadian Space Agency's figure for the International Space Station; a deep-space mission may differ. There are no status bands because we have not verified a dose limit from a source yet. Solar particle events are not forecast.",
+    "limits": "The total is arithmetic on the dosimeter readings. The neutron share is the Canadian Space Agency's figure for the International Space Station; a deep-space mission may differ. NASA's career limit of 600 mSv counts every flight of a career; the tool only knows this mission. It sets no lower watch level, because none was taken from a source. Solar particle events are not forecast.",
     "basis": "partner",
     "sourceId": "csa-radiation",
-    "needsReview": false
+    "needsReview": false,
+    "alsoSourceIds": [
+      "nasa-radiation-brief"
+    ]
   }
 ]

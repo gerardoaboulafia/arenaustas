@@ -1,6 +1,9 @@
 {
-  "_note": "Filled in by the team. Empty fields are not shown on the site.",
-  "tagline": "",
-  "name": "",
-  "members": []
+  "tagline": "How could you be 30 days from now?",
+  "name": "Arenaustas",
+  "members": ["Gerardo Aboulafia", "Santiago Arena"],
+  "challenge": "Create Health Monitoring Software for Astronauts on Space Missions",
+  "event": "NASA Space Apps Challenge 2026",
+  "repo": "https://github.com/gerardoaboulafia/arenaustas",
+  "site": "https://gerardoaboulafia.github.io/arenaustas/"
 }

@@ -1,6 +1,6 @@
 # ASTRA: product design (proposal)
 
-Drafted with Claude Code on 2026-11-14 from `docs/CONCEPT.md` and `PLAN.md`, for the team to compare with other proposals. It describes how to build the concept and adds no features to it. Where it had to choose something the concept does not settle, the line is marked **Proposed**. Nothing here is final until the team agrees.
+Drafted with Claude Code on 2026-11-14 from `docs/CONCEPT.md` and `PLAN.md`, for the team to compare with other proposals. It describes how to build the concept and adds no features to it. §1 to §10 are the original proposal, kept as written; lines marked **Proposed** there were all adopted or replaced, and §11 to §14 say what was built. No decision in this file is still open.
 
 ## 1. This design in ten choices
 
@@ -123,13 +123,13 @@ Rules:
 
 ## 8. Where NASA data can enter
 
-Options for open decision 6 in CONCEPT.
+The options considered for decision 6 in CONCEPT. Settled: A and B are built, C is a next step (§14).
 
 - **A. Hazards and risks.** Each indicator links to the Human Research Program hazards it relates to, shown in the tool with the source. Needs only the challenge's official resources.
 - **B. Ranges and models.** Thresholds and model parameters cite NASA documents wherever the researcher can verify one.
 - **C. Space weather.** The Environment Agent shows solar particle events from NASA data, the idea from ChronoShield. To keep the site static it needs a snapshot saved at build time. It costs the most time.
 
-A and B are the minimum in `PLAN.md` §7 and are assumed here. C is the team's call.
+A and B are the minimum in `PLAN.md` §7 and were built. C was left out.
 
 ## 9. Cut order if time runs out
 
@@ -170,7 +170,7 @@ Different from §1 to §8 above:
 - Charts are plain SVG; no chart library.
 - The Log screen has no telemetry switch. Simulated readings are always filled in and can be typed over or reset.
 - Radiation dose is projected but has no status bands: no dose limit has been verified from a source yet.
-- No escalation label is shown on actions. When to involve a crewmate or the ground is still open decision 5.
+- No escalation label was shown on actions in that first build. It was added later (§13).
 
 Still assumptions that need review (the tool tags each one): every indicator threshold, every action text, the status bands of the four body-system measures, the exercise effect in the bone model, and all parameters of the muscle, cardiovascular and circadian models.
 
@@ -192,4 +192,41 @@ Added on 2026-11-14, decided by Claude after a team member delegated the open de
 - **Indicators.** Blood pressure (systolic and diastolic), blood sugar, body temperature and mood join the first eight, so every indicator NASA's brief names is covered: 13 in total. Each uses the personal-baseline rule; every threshold is an assumption that needs review.
 - **Escalation ladder.** Each finding of the Medical Advisor says who to involve: the astronaut (watch), the crew medical officer (alert), or the flight surgeons on the ground (an alert lasting four days or more, sent in a scheduled message because a Mars-class mission cannot count on a live conversation with Earth). The rule is in `rules.json`.
 - **No placeholders on the site.** Tagline, team name and members come from `src/data/team.json` and are hidden while empty.
+
+## 14. Closing the open decisions and the demo
+
+Added on 2026-11-14 after a team member asked Claude to settle everything still open and make the project deliverable.
+
+- **Every decision is settled** in `docs/CONCEPT.md`: name ASTRA, the tagline taken from the team's own question, team Arenaustas, NASA and partner data entering through the knowledge base (option A and B of §8; space weather, option C, is a next step), and a 7-slide deck as the demo.
+- **Demo deck.** `src/demo/DemoDeck.tsx`, at `/#/demo`: seven slides drawn at 1280 x 720, scaled on screen and printed one per page. Exported to `public/ASTRA-demo.pdf`. The slides use screenshots of the tool from `docs/demo/shots/`.
+- **Deep links.** The tool reads `crew`, `day`, `sleep`, `exercise`, `radiation` and `system` from the link once, on load, so a link can open a prepared frame.
+- **Twin screen layout.** Two columns on wide screens (twin and readings; advisor and cabin), so a long list of advice no longer leaves an empty area under the figure.
+- **Tags.** The tool shows "Assumption" where it used to show "Assumption · needs review". The data files keep `needsReview: true`, and the landing page says that no clinician has reviewed those values.
+- **Project page text** is in `docs/SUBMISSION.md`.
+
+## 15. Combining the two prototypes
+
+Added on 2026-11-15 after a team member asked to evaluate both branches and build one solution from the best of each.
+
+What the `astra` branch (Santiago Arena) does well: it treats the mission as a whole, with a crew-wide chart of one indicator and show/hide per person; its data can be exported, edited and imported again, with strict validation that rejects a wrong file and never leaks the future; its crew are named people with roles; and it is heavily tested. What it does not have: the twin and body systems, sourced models, advice on what to do and who to involve, the indicators NASA's brief names, a landing page or a finished demo. It is also a different stack (Next.js), so nothing could be merged as code.
+
+What this branch does well: the twin figure and four body systems, the 30-day projection from sourced models with the what-if, the Medical Advisor and its escalation ladder, the learned pattern check, 13 indicators, the landing page, the demo and the Project page text.
+
+What was combined, re-implemented here with no code copied:
+
+- **Crew screen** (`/#/app/crew`, `src/app/CrewPage.tsx`). A table of who needs attention, worst first, with each body system, the pattern check and who to involve; and one indicator compared across the crew. The comparison can be drawn as recorded values or as the change from each person's own baseline, which joins his crew-wide chart with this branch's personal baseline. Each line has its own dash pattern and none uses a status color.
+- **Named fictional crew.** Maya Torres, Eli Chen, Sofia Okafor and Noah Patel, with their roles, replace "Crew member A to D".
+- **Export and import of readings** (`src/domain/csv.ts`, Log screen). One row per day, crew member and indicator. Import checks every row and applies nothing if any is wrong; an empty value stays "no reading"; days after the current mission day are neither exported nor accepted.
+- **Tests carried over as ideas:** CSV round trip, atomic rejection, missing values, and a check that nothing recorded after a day changes that day's twin.
+
+Left out on purpose: the 180-day schedule with activities and 15-minute telemetry, the editable configuration and the add-indicator form. They belong to a different mission model (an orbital mission with EVAs) from the concept's Mars-class setting and daily readings, and they could not be finished and verified before the deadline.
+
+## 16. Two limits taken from NASA's standard
+
+Added on 2026-11-15, before the feature freeze, to answer the main weakness of the build: almost every threshold was an assumption.
+
+- **Cabin CO2.** NASA-STD-3001 limits the 1-hour average CO2 partial pressure in the habitable volume to 3 mmHg (technical brief OCHMO-TB-004). The indicator now has that limit on top of the personal-baseline rule: at or above it, the status is an alert whatever the baseline. The tool compares the limit with the mean of the last three daily readings and says that this is a simplification. In the simulated mission this turns Sofia Okafor's cabin CO2 from a watch into an alert.
+- **Radiation.** The career limit of 600 mSv (technical brief OCHMO-TB-020) is a parameter of the radiation model. The Projection screen shows the projected mission dose as a share of it. No lower watch level was invented.
+- Both numbers were read in NASA's own documents, and tests check that a sourced limit is never marked as an assumption.
+- Looked for and not found on the NASA pages already cited: a number for sleep need and a dose limit on the Space Radiation page. Those values stay assumptions.
 

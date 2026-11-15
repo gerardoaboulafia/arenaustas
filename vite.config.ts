@@ -7,5 +7,8 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   base: './',
   plugins: [react(), tailwindcss()],
+  // When the checkout lives in iCloud Drive, node_modules is a link to node_modules.nosync.
+  // Keeping the link in paths lets the dev server still treat those files as dependencies.
+  resolve: { preserveSymlinks: true },
   test: { environment: 'node', include: ['src/**/*.test.ts'] },
 });
